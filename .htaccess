@@ -1,0 +1,10 @@
+# NB. Nginx do not support .htaccess
+# Activate rewriting URL on Apache server
+RewriteEngine On
+
+# Rewrite condition : 1 - Permit access if file path exist; and do not redirect to index.php
+#					  2	- Permit access if directory exist;
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ index.php?url=$1 [NC,L]
