@@ -2,21 +2,23 @@
 <p><?= $description; ?></p>
 <div class="gallery">
 <?php foreach($posts as $post) : ?>
-	<figure onmouseover="display(<?=$post->photo_id?>)" onmouseout="display(<?=$post->photo_id?>)">
-		<img class="photo" alt="photo" src=<?=$post->photo_path; ?>>
-		<figcaption id="<?= $post->photo_id ?>"class="legende">
+	<figure onmouseover="display(<?php echo $post->photo_id; ?>)" onmouseout="display(<?php echo $post->photo_id; ?>)">
+		<img class="photo" alt="photo" src=<?= $post->photo_path; ?>>
+
+		<figcaption id="<?= $post->photo_id ?>" class="legende" $>
 			<div class='icon-pack'>
-				<!-- <a href="gallery/like?postId=<?= $post->photo_id; ?>" > -->
-					<img onclick="like(<?= $post->photo_id ?>)" alt='like' class='icon' src='./tools/img/unlike.png'>
-					<img onclick="like(<?= $post->photo_id ?>)" alt='unlike' class='icon hidden' src='./tools/img/like.png'>
-				<!-- </a> -->
-				<p><?= "($post->photo_nbLikes)" ?></p>
+
+				<img alt='like' class='icon like' src='./tools/img/unlike.png' onclick="<?= $act_like . '(' . $post->photo_id . ')' ?>">
+				<img alt='unlike' class='icon unlike hidden' src='./tools/img/like.png' onclick="unlike(<?= $post->photo_id ?>)">
+				<p><?= $post->photo_nbLikes ?></p>
+
 			</div>
 			<div class='icon-pack'>
 				<img  alt='comment' class='icon' src='./tools/img/comment.png'>
-				<?= $post->photo_nbComm ?>
+				<p><?= $post->photo_nbComm ?></p>
 			</div>
 		</figcaption>
+
 	</figure>
 <?php endforeach; ?>
 </div>

@@ -20,5 +20,17 @@ class Like extends Model {
 
 	}
 
+	function rmLikeOn($post, $user) {
+
+		$this->del([
+			'conditions'	=>
+				['like_photoId = ?',
+				'like_userId = ?'],
+			'params'		=>
+				[$post, $user]
+		]);
+
+	}
+
 
 }

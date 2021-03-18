@@ -39,4 +39,12 @@ class Photo extends Model {
 		]);
 	}
 
+	function unliked($post, $photoId) {
+		$this->update([
+			'to_update'	=> 'photo_nbLikes = photo_nbLikes - 1',
+			'conditions'=> 'photo_id = ?',
+			'params'	=> [$post]
+		]);
+	}
+
 }

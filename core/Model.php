@@ -72,7 +72,6 @@ class Model {
 		if (isset($req['to_set'])) {
 			$sql .= $this->put_and($req['to_set'], ',');
 		}
-		debug($req);
 		if (isset($req['params'])) {
 			$this->query($sql, $req['params']);
 		} else { $this->query($sql); }
@@ -101,6 +100,20 @@ class Model {
 		if (isset($req['to_update'])) {
 			$sql .= $this->put_and($req['to_update'], ',');
 		}
+		if (isset($req['conditions'])) {
+			$sql .= ' WHERE ';
+			$sql .= $this->put_and($req['conditions'], 'AND');
+		}
+		if (isset($req['params'])) {
+			$this->query($sql, $req['params']);
+		} else {
+			$this->query($sql);
+		}
+	}
+
+	public function del($req) {
+		$sql = "DELETE FROM Camagru. $this->table";
+
 		if (isset($req['conditions'])) {
 			$sql .= ' WHERE ';
 			$sql .= $this->put_and($req['conditions'], 'AND');

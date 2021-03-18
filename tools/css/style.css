@@ -35,14 +35,14 @@ video {
 	display: none;
 }
 
-button {
+/* button {
 
 	display: block;
 	margin: auto;
 	width: 20px;
     height: 20px;
 
-}
+} */
 
 /** Affichage des $_SESSION[flashs][danger|success] **/
 #alert {
@@ -424,10 +424,6 @@ footer {
 	.gallery {
 		display: flex;
 		flex-wrap: wrap;
-	}
-	button {
-		display: block;
-		margin: auto;
 	}
 
 	.selfies {

@@ -61,8 +61,10 @@
 	</body>
 
 	<script type="text/javascript" src="./tools/js/buttonAnim.js"></script>
-	<script type="text/javascript" src="./tools/js/gallery.js"></script>
+	<?php if($nav_title === "Gallery"): ?>
+		<script type="text/javascript" src="./tools/js/gallery.js"></script>
+	<?php endif; ?>
 	<?php if($nav_title === "Photobooth"): ?>
-	<script type='text/javascript' src='./tools/js/cam.js'></script>
+		<script type='text/javascript' src='./tools/js/cam.js'></script>
 	<?php endif; ?>
 </html>

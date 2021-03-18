@@ -6,7 +6,7 @@
 			<canvas id="imgPreview" width="1280" height="720" ></canvas>
 
 			<div id="snapPhoto">
-				<button id='snapBtn' class='snap' disabled onclick="takePhoto()" ></button>
+				<button id='snapBtn' class='snap' disabled onclick="takePhoto()" >Snap</button>
 				<audio id="snapNoise" class='snap' src="https://freesound.org/data/previews/202/202296_1038806-lq.mp3" hidden></audio>
 			</div>
 			<!--  Upload photo method  -->
