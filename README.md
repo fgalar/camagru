@@ -1,3 +1,3 @@
-# camagru inspired by 2020
+# camagru super ironic inspired by 2020
 
 Get a selfie with Mens of this year, or get 2020 best fashion accessories
