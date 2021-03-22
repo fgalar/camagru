@@ -45,6 +45,11 @@ class Account extends Model {
 				'From' => 'fgarault@camagru.42.fr'));
 	}
 
+	public function getAccountById($id) {
+		$user = $this->find(['conditions' => 'account_id = ?', 'params' => [$id]]);
+		return $user->fetch();
+	}
+
 	public function confirm($user_id, $token)	{
 
 		$user = $this->find([

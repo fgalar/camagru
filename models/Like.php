@@ -7,8 +7,13 @@ class Like extends Model {
 	}
 
 
-	function get_nbLikesOnPhoto($post) {
-
+	function isLiked($post, $id) {
+		$ret = $this->find([
+			'conditions'	=> ['like_photoId = ?',
+								'like_userId = ?'],
+			'params'		=> [$post, $id]
+		])->fetch();
+		return $ret;
 	}
 
 	function add_likeOn($post, $id) {

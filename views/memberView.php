@@ -11,8 +11,15 @@
 		<?php else : ?>
 				<?php $tmp = ''; ?>
 		<?php endif; ?>
-		<input type="<?= $type ?>" name="<?= $input ?>" id="<?= $input ?>"value="<?= $tmp ; ?>" />
+		<input type="<?= $type ?>" name="<?= $input ?>" id="<?= $input ?>" value="<?= $tmp ; ?>" />
 		<br /> <br />
 	<?php endforeach; ?>
 	<button type="submit"><?= $submit_btn?> </button>
 </form>
+
+<?php foreach ($selfies as $selfie): ?>
+	<div class="miniature">
+		<span class="remove">&times;</span>
+		<img alt="<?= $selfie->photo_id ?>" src="<?= $selfie->photo_path ?>" >
+	</div>
+<?php endforeach ; ?>

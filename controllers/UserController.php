@@ -104,6 +104,7 @@ class User extends Controller {
 	}
 
 	public function loadMemberData() {
+		$this->loadModel('Photo');
 		$d = ['nav_title'		=> "Profil",
 					'user_input'	=> [
 						'name' 	=> 'text',
@@ -113,6 +114,8 @@ class User extends Controller {
 						'comments'	=> 'checkbox'],
 					'submit_btn'	=> 'Confirm changes'];
 		$this->set($d);
+		$posts = $this->Photo->getPostUser($_SESSION['auth']->account_id);
+		$this->set('selfies', $posts);
 	}
 
 	/**  Validation of datas entered by user  **/

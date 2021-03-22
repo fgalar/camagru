@@ -6,22 +6,15 @@ class Member extends User {
 		parent::__construct($data);
 		if (!$this->userRunning()) {
 			$this->session->setFlash('danger', "You must have an account for access this page.");
-			Router::redirect('user/login');
+			Router::redirect('../user/login');
 			exit(-1);
 		}
 		$this->loadModel('Account');
+		$this->loadModel('Photo');
 	}
 
 	public function index() {
-		$this->set(['nav_title'		=> "Profil",
-					'user_input'	=> [
-						'name' 	=> 'text',
-						'mail'		=> 'text',
-						'pass'	=> 'password'],
-					'notify mail when' 	=> [
-						'comments'	=> 'checkbox'],
-					'submit_btn'	=> 'Confirm changes'
-					]);
+
 	}
 
 	function majInfo() {
@@ -64,6 +57,15 @@ class Member extends User {
 			$this->getErr();
 		}
 
-
 	}
+
+	function removeImg($id) {
+
+		$photo = $this->Photo->getImgbyId($id['postId']);
+
+		unlink($photo->photo_path);
+
+		$this->Photo->removePhoto($id['postId']);
+	}
+
 }

@@ -12,7 +12,7 @@
 	</head>
 	<body>
 
-		<header>
+		<header id='dataBox'>
 			<?php if (isset($jsdata)): ?>
 				<?= json_encode($jsdata) ; ?>
 			<?php endif; ?>
@@ -66,5 +66,8 @@
 	<?php endif; ?>
 	<?php if($nav_title === "Photobooth"): ?>
 		<script type='text/javascript' src='./tools/js/cam.js'></script>
+	<?php endif; ?>
+	<?php if($nav_title === "Profil"): ?>
+		<script type='text/javascript' src='./tools/js/account.js'></script>
 	<?php endif; ?>
 </html>

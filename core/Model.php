@@ -37,7 +37,6 @@ class Model {
 				$stmt->execute();
 				return $stmt;
 			}
-
 			$stmt->execute($params);
 		} else {
 			$stmt = $this->_pdo->query($query);
@@ -124,4 +123,6 @@ class Model {
 			$this->query($sql);
 		}
 	}
+
+
 }

@@ -2,19 +2,20 @@
 <p><?= $description; ?></p>
 <div class="gallery">
 <?php foreach($posts as $post) : ?>
-	<figure onmouseover="display(<?php echo $post->photo_id; ?>)" onmouseout="display(<?php echo $post->photo_id; ?>)">
-		<img class="photo" alt="photo" src=<?= $post->photo_path; ?>>
+	<figure onmouseover="mouseHoverDisplay(<?php echo $post->photo_id; ?>)" onmouseout="mouseHoverDisplay(<?php echo $post->photo_id; ?>)">
+		<img class="photo" alt="photo" src="<?= $post->photo_path; ?>" id="<?= $post->photo_id ?>">
 
-		<figcaption id="<?= $post->photo_id ?>" class="legende" $>
+		<figcaption class="legende" id="<?= 'caption' . $post->photo_id ?>">
 			<div class='icon-pack'>
 
-				<img alt='like' class='icon like' src='./tools/img/unlike.png' onclick="<?= $act_like . '(' . $post->photo_id . ')' ?>">
-				<img alt='unlike' class='icon unlike hidden' src='./tools/img/like.png' onclick="unlike(<?= $post->photo_id ?>)">
+					<img alt='unlike' class='icon unlike <?= $post->likedByUser ?>' src='./tools/img/like.png' onclick="unlike(<?= $post->photo_id ?>)">
+					<img alt='like' class='icon like <?= $post->unlikedByUser ?>' src='./tools/img/unlike.png' onclick="<?= $act_like . '(' . $post->photo_id . ')' ?>">
+
 				<p><?= $post->photo_nbLikes ?></p>
 
 			</div>
 			<div class='icon-pack'>
-				<img  alt='comment' class='icon' src='./tools/img/comment.png'>
+				<img alt='<?= $post->photo_id ?>' class='icon com' src='./tools/img/comment.png'>
 				<p><?= $post->photo_nbComm ?></p>
 			</div>
 		</figcaption>
@@ -38,9 +39,21 @@
 		</li> -->
 	</ul>
 </nav>
-<!-- The Modal -->
+<!-- Modal -->
 <div id="myModal" class="modal">
-			<span class="close">&times;</span>
-			<img class="modal-content" id="img01">
-			<div id="caption"></div>
+	<span class="close">&times;</span>
+
+	<img class="modal-content" id="img01">
+	<?php if ($this->userRunning()) : ?>
+	<form method="POST">
+		<textarea name="comment" placeholder="Say something..."></textarea>
+		<button type="button" onclick="postComment()">Publish</button>
+	</form>
+	<?php endif; ?>
+
+	<ul id="commentaries">
+
+	</ul>
+
+	<!-- <div id="caption"></div> -->
 </div>

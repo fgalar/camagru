@@ -7,14 +7,35 @@ class Comment extends Model {
 
 	}
 
-
 	function get_comments($post) {
+		$comments = $this->find([
+			'conditions' => "`comm_forPhoto` = ? ORDER BY `comm_writeAt`",
+			'params'	=> [$post]
+		])->fetchAll();
+		foreach ($comments as $obj) {
+			$obj->name = $this->get_authorComment($obj->comm_byId);
+		}
+		return $comments;
 
+	}
+
+	function get_authorComment($id) {
+		$ret = $this->query("SELECT `account_name` FROM `comments`, `accounts` WHERE `comm_byId` = ? ", [$id])->fetch();
+		return $ret->account_name;
 	}
 
 	function add_comment($comment, $onPostId, $userId) {
 
+		$this->set(['to_set' => ['comm_content = ?',
+								'comm_byId = ?',
+								'comm_forPhoto = ?'],
+					'params' => [$comment,$userId, $onPostId]]);
+		$lastCom = $this->find([
+			'conditions'	=> 'comm_id = ?',
+			'params'		=> [$this->lastInsertId()]
+		])->fetch();
+		$lastCom->name = $this->get_authorComment($lastCom->comm_byId);
+		return $lastCom;
 	}
-
 
 }

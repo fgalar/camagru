@@ -4,7 +4,6 @@ var context = canvas.getContext('2d');
 var snap = document.getElementsByClassName('snap');
 var capture = document.getElementById('photoBox');
 
-
 var filter = undefined;
 var method = undefined;
 var userImg = undefined;
@@ -105,17 +104,18 @@ function reloadImg() {
 function takePhoto(){
 
 	snap['snapNoise'].play();
+	const preview = canvas.toDataURL('image/png');
+	const link = document.createElement('a');
+
+	link.href = preview;
+	link.setAttribute('download', 'handsome');
+	link.textContent = 'Download Image';
+	link.innerHTML = `<img src="${preview}" alt="Selfie" />`;
+	capture.insertBefore(link, capture.firstChild);
+
 	reloadImg();
 
 	const data = canvas.toDataURL('image/png');
-	const link = document.createElement('a');
-
-	link.href = data;
-	link.setAttribute('download', 'handsome');
-	link.textContent = 'Download Image';
-	link.innerHTML = `<img src="${data}" alt="Selfie" />`;
-	capture.insertBefore(link, capture.firstChild);
-
 	postPhoto(filter.src, data);
 
 }
@@ -129,15 +129,6 @@ function postPhoto(choosenFilter, data) {
 	formData.append('filter', choosenFilter);
 
 	xhr.open('POST', 'photobooth/share', true);
-
-	xhr.onreadystatechange = function() {
-
-		// Control states of resquest
-		if (this.readyState == 4 && this.status == 200) {
-			console.log(this.response);
-		} else { console.log('Opsi, smthg went wrong...'); }
-
-	}
 
 	xhr.send(formData);
 }

@@ -54,8 +54,8 @@ try {
 		`photo_nbLikes` INT DEFAULT 0,
 		`photo_nbComm` INT DEFAULT 0,
 		`photo_userId` INT NOT NULL ,
-		FOREIGN KEY (photo_userId) REFERENCES accounts(account_id)
-		)");
+		FOREIGN KEY (photo_userId)
+			REFERENCES accounts(account_id))");
 	echo "Create new photos TABLE with success";
 } catch(PDOException $e) {
 	die("Failed creating photos TABLE: " . $e->getMessage());
@@ -67,11 +67,14 @@ try {
 		`comm_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 		`comm_content` VARCHAR(255) NOT NULL ,
 		`comm_writeAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-		`comm_by` INT NOT NULL ,
-		`comm_for` INT NOT NULL,
-		FOREIGN KEY (comm_by) REFERENCES accounts(account_id),
-		FOREIGN KEY (comm_for) REFERENCES photos(photo_id)
-		)");
+		`comm_byUserId` INT NOT NULL ,
+		`comm_forPhotoId` INT NOT NULL,
+		FOREIGN KEY (comm_byUserId)
+			REFERENCES accounts(account_id),
+		FOREIGN KEY (comm_forPhotoId)
+			REFERENCES photos
+		(photo_id)
+			ON DELETE CASCADE)");
 	echo "Create new comments TABLE with success";
 } catch(PDOException $e) {
 	die("Failed creating comments TABLE: " . $e->getMessage());
@@ -83,8 +86,10 @@ try {
 		`like_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 		`like_photoId` INT NOT NULL ,
 		`like_userId` INT NOT NULL ,
-		FOREIGN KEY (like_photoId) REFERENCES photos(photo_id),
-		FOREIGN KEY (like_userId) REFERENCES accounts(account_id)
+		FOREIGN KEY (like_photoId)
+			REFERENCES photos(photo_id),
+		FOREIGN KEY (like_userId)
+			REFERENCES accounts(account_id)
 		)");
 	echo "Create new likes TABLE with success";
 } catch(PDOException $e) {
@@ -108,11 +113,12 @@ require 'core/functions.php';
 try {
 	$dir = 'tmp';
 	$scanned_directory = array_diff(scandir($dir, SCANDIR_SORT_DESCENDING), array('..', '.', '.DS_Store'));
-	debug($scanned_directory);
+
 	foreach ($scanned_directory as $file) {
-		$pdo->exec("INSERT INTO `photos` (`photo_path`, `photo_takeAt`, `photo_userId`)
-		VALUES
-		('tmp/$file', CURRENT_TIMESTAMP, '1');
+		$pdo->exec("INSERT INTO
+						`photos` (`photo_path`, `photo_takeAt`, `photo_userId`)
+					VALUES
+						('tmp/$file', CURRENT_TIMESTAMP, '1');
 		");
 	}
 
