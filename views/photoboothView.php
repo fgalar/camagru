@@ -27,10 +27,10 @@
 		</div> <!--  end boxFilter  -->
 
 	</div><!--  end main  -->
-	<div id="side">
-		<form id="photoBox" method="post" enctype="multipart/form-data" action="photobooth">
+	<div id="side" class="photoBox">
+		
 
-		</form> <!--  end photobox  -->
+		
 	</div> <!--  end side  -->
 </div> <!--  end photobooth -->
 

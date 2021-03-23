@@ -2,7 +2,7 @@ var video = document.getElementById('video');
 var canvas = document.getElementById('imgPreview');
 var context = canvas.getContext('2d');
 var snap = document.getElementsByClassName('snap');
-var capture = document.getElementById('photoBox');
+var capture = document.getElementById('side');
 
 var filter = undefined;
 var method = undefined;

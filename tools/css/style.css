@@ -1,5 +1,3 @@
-
-
 html, body {
   padding: 0;
   margin: 0;
@@ -27,25 +25,15 @@ img {
 	margin-bottom: 5px;
 }
 
-/* video, canvas {
-
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-} */
+form {
+	margin: 15px 15px;
+	padding: 5px 5px;
+}
 
 video {
 	display: none;
 }
 
-/* button {
-
-	display: block;
-	margin: auto;
-	width: 20px;
-    height: 20px;
-
-} */
 
 /** Affichage des $_SESSION[flashs][danger|success] **/
 #alert {
@@ -68,6 +56,7 @@ video {
 	top: 2em;
 	padding: 20px;
 }
+
 .hidden {
 	display: none;
 }
@@ -198,11 +187,6 @@ figure {
     max-width: 500px;
     margin: auto;
 }
-/* 
-img {
-    max-width: 500px;
-    max-height: 500px;
-} */
 
 figcaption {
     background-color: #222;
@@ -253,17 +237,16 @@ nav {
 
   /* The Modal (background) */
 .modal {
-	display: none; /* Hidden by default */
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	padding-top: 100px; /* Location of the box */
+	display: none;
+	position: fixed;
+	z-index: 1;
+	padding-top: 100px;
 	left: 0;
 	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgb(0,0,0); /*Fallback color */
-	background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0,0,0,0.9);
 }
 
 /* Modal Content (image) */
@@ -306,18 +289,18 @@ nav {
 }
 
 
-  @-webkit-keyframes zoom {
-	from {-webkit-transform:scale(0)} 
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)} 
 	to {-webkit-transform:scale(1)}
-  }
+}
 
-  @keyframes zoom {
+@keyframes zoom {
 	from {transform:scale(0)} 
 	to {transform:scale(1)}
-  }
+}
 
   /* The Close Button */
-  .close {
+.close {
 	position: absolute;
 	top: 15px;
 	right: 35px;
@@ -325,7 +308,7 @@ nav {
 	font-size: 40px;
 	font-weight: bold;
 	transition: 0.3s;
-  }
+}
 
 .close:hover, .close:focus {
 	color: #bbb;
@@ -334,18 +317,18 @@ nav {
 }
 
   /* 100% Image Width on Smaller Screens */
-  @media only screen and (max-width: 700px){
-	.modal-content {
-	  width: 100%;
-	}
-  }
+/* @media only screen and (max-width: 700px){
+    .modal-content {
+        width: 100%;
+    }
+} */
 
 
 
 
 
 
-/**  PHOTOBOOTH **/
+/*****  Photobooth *****/
 .photobooth {
   position: relative;
 	display: flex;
@@ -364,21 +347,26 @@ nav {
 
 .main {
   display: flex;
-	flex-direction: column;
+  width: 500px;
+  flex-direction: column;
+}
+.photoBox {
+	display:none;
 }
 
 #boxFilter {
 	display: flex;
 	flex-direction: row;
-	background-color: aliceblue;
+	background-color: powderblue;
 	flex-wrap: nowrap;
 	justify-content: space-between;
 	overflow-y: scroll;
+	padding: 5px;
 }
 .filter {
-	border: 0.1rem solid;
 	margin: 3px;
 	max-width: 9em;
+	background-color:whitesmoke;
 }
 
 #photoBox {
@@ -389,23 +377,11 @@ nav {
 	margin: 5px 5px;
 }
 
-.side {
-	display:none;
-}
-
-.camView > button:nth-child(3) {
-	color: white;
-	background-color: transparent;
-	display: block;
-	margin: auto;
-	position: relative;
-}
-
 #upload {
 	margin: 50px;
 }
 
-/**  Account **/
+/*****  Account *****/
 .miniature {
 	width: 200px;
 	height: 150px;
@@ -436,17 +412,15 @@ footer {
 }
 
 /*   Media queries : faire apparitre disparaitre styles en fonction de la taille      */
-/*    Ici grand écran       768px  */
+/*    Big Screen      768px  */
 @media screen and (min-width: 798px) {
-	* {
-		box-sizing: border-box;
-	}
+
 	body > header:nth-child(3) {
 		position: absolute;
 	}
 	.menuToggle span{
-    display: none;
-  }
+    	display: none;
+  	}
 	.menu ul {
 		display: flex;
 	}
@@ -475,26 +449,25 @@ footer {
 		margin: 10px;
 	}
 
-	.side {
-		display: flex;
-		flex-direction: column;
-		align-content: center;
-		flex-wrap: nowrap;
-		justify-content: flex-start;
+	.photoBox {
+	    display: flex;
+	    flex-direction: column;
+	    background-color: whitesmoke;
+	    flex-wrap: nowrap;
+	    justify-content: space-between;
+	    overflow-y: scroll;
+	    height: 483px;
+	    margin: 0px 15px;
+	    padding: 5px 5px;
+	    width: 500px;
 	}
 
-	.side  form{
-		display:flex;
-		flex-direction: column;
-
-	}
-
-	.side a {
+	.photoBox a {
 		margin-bottom: auto;
 		margin-top:auto;
 	}
-
 }
+
 
 @media (max-width: 797px) {
 
