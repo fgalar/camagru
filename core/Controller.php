@@ -3,7 +3,7 @@
 class Controller {
 
 	private $vars 		= array(); // Var to pass on View
-	private $rendered 	= false;   // True if Render already made
+	private $rendered 	= false;   // True if Render has already made
 	protected $session;
 
 	function __construct() {
@@ -12,7 +12,7 @@ class Controller {
 	}
 
 	/**
-	 * Permit to render View
+	 * Render View
 	 * @param string name of the view
 	 **/
 	function render ($view) {
@@ -28,7 +28,7 @@ class Controller {
 	}
 
 	/**
-	 * Permit set one or most var to View
+	 * Set one or most var to View
 	 * @param $key name of variable OR tab of variables
 	 * @param $value Valeur attaché à $key
 	 */
