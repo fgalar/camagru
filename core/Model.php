@@ -1,7 +1,7 @@
-<?php
+<?PHP
 
 /**
- * Class Model is the constructive class containing all general function of request to DB
+ * Class Model is the constructive class containing all general functions of request DB
  * @var $_pdo : Access to Database.
  * @var $table : Requested by $model (each $model refered to a SQL table).
  */
@@ -26,9 +26,9 @@ class Model {
 	}
 
 	/**
-	 *  @param $query string request.
-	 *  @param $params to send with request.
-	 *  @param $type when set LIMIT or OFFSET. 
+	 *  @param $query string of request.
+	 *  @param $params tab to send with request.
+	 *  @param $type when set LIMIT or OFFSET/not convert to INT by mySQL. 
 	 *  @return $stmt result of the request.
 	 **/
 	public function query($query, $params = [], $type = 's') {
@@ -127,7 +127,7 @@ class Model {
 	}
 
 	/**
-	 *  Delete row of a SQL table.
+	 *  Delete a row of a SQL table.
 	 *  @param tab['conditions', 'params']
 	 **/
 	public function del($req) {
