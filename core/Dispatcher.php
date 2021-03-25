@@ -1,9 +1,11 @@
 <?php
 
 /**
- * La classe Dispatcher récupère l'objet Rooter;
- * Array ( [controller] => gallery [action] => view [params] => Array ( [0] => example ) )
- * et oriente vers le bon controller.
+ * The Dispatcher get the Router object: Array (
+ *	[controller]	=> gallery 
+ *	[action] 		=> view 
+ *	[params] 		=> Array ( [0] => example ) )
+ * and then redirect it through the good controller.
  **/
 require_once './core/functions.php';
 class Dispatcher {
@@ -13,18 +15,18 @@ class Dispatcher {
 	function __construct() {
 		$this->request = Router::parse();
 		$controller = $this->loadController($this->request);
-		//debug(get_class($controller));
+	
 		if (!in_array($this->request['action'], get_class_methods($controller))) {
-			$controller->e404('Le controller ' . $this->request['controller'] . " n'a pas de methode " . $this->request['action']);
+			$controller->e404('Le controller ' . $this->request['controller'] . " haven't got method: " . $this->request['action']);
 		}
 		call_user_func_array(array($controller, $this->request['action']), $this->request['params']);
 		$controller->render($this->request['controller']);
 	}
 
 	/**
-	* Permet d'orienter vers le bon controller
+	* Create the good Controller
 	* @param $params array([controller], [action], [params][])
-	* @return $controller si existe OU new Controller ou l'erreur sera géré
+	* @return $controller if exist OR new Controller where error will be managed
 	**/
 	function loadController($params) {
 		$controller = ucfirst($params['controller']);

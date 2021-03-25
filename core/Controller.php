@@ -2,8 +2,8 @@
 
 class Controller {
 
-	private $vars 		= array();	// Variables à passer à la vue
-	private $rendered 	= false;	// True si rendu déjà effectué
+	private $vars 		= array(); // Var to pass on View
+	private $rendered 	= false;   // True if Render already made
 	protected $session;
 
 	function __construct() {
@@ -12,9 +12,9 @@ class Controller {
 	}
 
 	/**
-	 * Permet de rendre la vue
-	 * @param string nom de la vue
-	 */
+	 * Permit to render View
+	 * @param string name of the view
+	 **/
 	function render ($view) {
 		if ($this->rendered)
 			return ;
@@ -28,8 +28,8 @@ class Controller {
 	}
 
 	/**
-	 * Permet de passer une ou plusieurs variable à la vue
-	 * @param $key nom de la variable OU tableau de variables
+	 * Permit set one or most var to View
+	 * @param $key name of variable OR tab of variables
 	 * @param $value Valeur attaché à $key
 	 */
 	function set ($key, $value = null){
@@ -41,8 +41,8 @@ class Controller {
 	}
 
 	/**
-	 * Permet de charger un model
-	 * @param $name nom du model
+	 * Permit to load a model
+	 * @param $name of model
 	 */
 	function loadModel($name) {
 		require_once ("./models/$name.php");

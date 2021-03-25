@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Model est la classe constructrice
- * @var $connexion : tableau static(commun à toutes les instances) concervant pdo.
- * @var $table : table sql en cours de traitement
+ * Class Model is the constructive class containing all general function of request to DB
+ * @var $_pdo : Access to Database.
+ * @var $table : Requested by $model (each $model refered to a SQL table).
  */
 class Model {
 
@@ -25,6 +25,12 @@ class Model {
 		}
 	}
 
+	/**
+	 *  @param $query string request.
+	 *  @param $params to send with request.
+	 *  @param $type when set LIMIT or OFFSET. 
+	 *  @return $stmt result of the request.
+	 **/
 	public function query($query, $params = [], $type = 's') {
 		if ($params) {
 
@@ -49,8 +55,9 @@ class Model {
 	}
 
 	/**
-	 * @param req tab|null ['to_set', 'params']
-	 * @return tab
+	 * Find row.s in a $table
+	 * @param req tab['to_set', 'params']
+	 * @return $stmt result of the request.
 	 */
 	public function find($req = []) {
 		$sql = "SELECT * FROM Camagru. $this->table ";
@@ -66,6 +73,10 @@ class Model {
 		return $stmt;
 	}
 
+	/**
+	 *  set a new line in mySQL DB
+	 *  @param $req ['to_set', 'params']
+	 **/
 	public function set($req) {
 		$sql = "INSERT INTO Camagru. $this->table SET ";
 		if (isset($req['to_set'])) {
@@ -76,6 +87,11 @@ class Model {
 		} else { $this->query($sql); }
 	}
 
+	/**
+	 *  Permit addition of SQL conditions or param
+	 *  @param $tab all arguments to add 
+	 *  @param $delimiter char ',' OR 'AND'..
+	 **/ 
 	public function put_and($tab, $delim) {
 		$sql = null;
 		if (!is_array($tab)) {
@@ -91,9 +107,9 @@ class Model {
 	}
 
 	/**
-	 * @param tab['to_update', 'conditions', 'params']
-	 * @return void
-	 */
+	 *  Update a SQL table's row 
+	 *  @param tab['to_update', 'conditions', 'params']
+	 **/
 	public function update($req) {
 		$sql = "UPDATE Camagru. $this->table SET ";
 		if (isset($req['to_update'])) {
@@ -110,6 +126,10 @@ class Model {
 		}
 	}
 
+	/**
+	 *  Delete row of a SQL table.
+	 *  @param tab['conditions', 'params']
+	 **/
 	public function del($req) {
 		$sql = "DELETE FROM Camagru. $this->table";
 

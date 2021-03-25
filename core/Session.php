@@ -1,12 +1,15 @@
-<?php
-class Session	{
+<?PHP
+
+/**
+ *  $session managed alert for User
+ **/
+class	Session	{
 
 	public function __construct() {
 		if (session_status() == PHP_SESSION_NONE) {
 			session_start();
 		}
 	}
-
 
 	public function setFlash($key, $msg) {
 		$_SESSION['flash'][$key] = $msg;
@@ -36,4 +39,5 @@ class Session	{
 	public function delete($key) {
 		unset($_SESSION[$key]);
 	}
+
 }

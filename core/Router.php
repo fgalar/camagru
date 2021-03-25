@@ -1,8 +1,7 @@
 <?PHP
-/**
- * @param string $viewPath chemin vers les views
- */
+
 class Router {
+	
 	static function parse(){
 		$url = $_GET ? $_GET['url'] : 'home';
 		$params = explode('/', $url);
