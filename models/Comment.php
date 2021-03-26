@@ -20,7 +20,7 @@ class Comment extends Model {
 	}
 
 	function get_authorComment($id) {
-		$ret = $this->query("SELECT `account_name` FROM `comments`, `accounts` WHERE `comm_byId` = ? ", [$id])->fetch();
+		$ret = $this->query("SELECT account_name FROM `accounts` WHERE `account_id` = ? ", [$id])->fetch();
 		return $ret->account_name;
 	}
 

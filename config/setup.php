@@ -68,10 +68,10 @@ try {
 		`comm_content` VARCHAR(255) NOT NULL ,
 		`comm_writeAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 		`comm_byId` INT NOT NULL ,
-		`comm_forPhotoId` INT NOT NULL,
+		`comm_forPhoto` INT NOT NULL,
 		FOREIGN KEY (comm_byId)
 			REFERENCES accounts(account_id),
-		FOREIGN KEY (comm_forPhotoId)
+		FOREIGN KEY (comm_forPhoto)
 			REFERENCES photos
 		(photo_id)
 			ON DELETE CASCADE)");
@@ -112,10 +112,10 @@ try {
 try {
 	$dir = 'tmp';
 	$file_toIgnore = ['..', '.', '.DS_Store'];
-	
+
 	if (file_exists($dir) == false) {
 		mkdir($dir);
-	} 
+	}
 
 	$scanned_directory = array_diff(scandir($dir, SCANDIR_SORT_DESCENDING), $file_toIgnore);
 	foreach ($scanned_directory as $file) {

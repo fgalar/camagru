@@ -62,6 +62,7 @@ class Photo extends Model {
 	}
 
 	function commented($post) {
+
 		$this->update([
 			'to_update'	=> 'photo_nbComm = photo_nbComm + 1',
 			'conditions'=> 'photo_id = ?',

@@ -99,6 +99,7 @@ class Gallery extends Controller {
 		$onPostId	= $_POST['photoId'];
 		$userId		= $this->userRunning()->account_id;
 		$author		= $this->Comment->add_comment($comment, $onPostId, $userId);
+
 		$for		= $this->Photo->commented($onPostId);
 		$for		= $this->Account->getAccountById($for->photo_userId);
 
