@@ -12,7 +12,7 @@ class Account extends Model {
 	}
 
 	public function remember($id) {
-		$token = random(250);
+		$token = Str::random(250);
 		$this->update(array(
 			'to_update' 	=> 'account_tokenRememberMe = ?',
 			'conditions' 	=> 'account_id = ?',
