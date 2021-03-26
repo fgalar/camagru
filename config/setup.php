@@ -109,17 +109,20 @@ try {
 }
 
 /** Chargement de fakephoto **/
-require 'core/functions.php';
 try {
 	$dir = 'tmp';
-	$scanned_directory = array_diff(scandir($dir, SCANDIR_SORT_DESCENDING), array('..', '.', '.DS_Store'));
+	$file_toIgnore = ['..', '.', '.DS_Store'];
+	
+	if (file_exists($dir) == false) {
+		mkdir($dir);
+	} 
 
+	$scanned_directory = array_diff(scandir($dir, SCANDIR_SORT_DESCENDING), $file_toIgnore);
 	foreach ($scanned_directory as $file) {
 		$pdo->exec("INSERT INTO
 						`photos` (`photo_path`, `photo_takeAt`, `photo_userId`)
 					VALUES
-						('tmp/$file', CURRENT_TIMESTAMP, '1');
-		");
+						('tmp/$file', CURRENT_TIMESTAMP, '1');");
 	}
 
 } catch (PDOException $e) {
