@@ -67,9 +67,9 @@ try {
 		`comm_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 		`comm_content` VARCHAR(255) NOT NULL ,
 		`comm_writeAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-		`comm_byUserId` INT NOT NULL ,
+		`comm_byId` INT NOT NULL ,
 		`comm_forPhotoId` INT NOT NULL,
-		FOREIGN KEY (comm_byUserId)
+		FOREIGN KEY (comm_byId)
 			REFERENCES accounts(account_id),
 		FOREIGN KEY (comm_forPhotoId)
 			REFERENCES photos
