@@ -28,7 +28,7 @@ class Model {
 	/**
 	 *  @param $query string of request.
 	 *  @param $params tab to send with request.
-	 *  @param $type when set LIMIT or OFFSET/not convert to INT by mySQL. 
+	 *  @param $type when set LIMIT or OFFSET/not convert to INT by mySQL.
 	 *  @return $stmt result of the request.
 	 **/
 	public function query($query, $params = [], $type = 's') {
@@ -63,7 +63,7 @@ class Model {
 		$sql = "SELECT * FROM Camagru. $this->table ";
 		if (isset($req['conditions'])) {
 			$sql .= ' WHERE ';
-			$sql .= $this->put_and($req['conditions'], 'AND');
+			$sql .= $this->add_SqlParam($req['conditions'], 'AND');
 		}
 		if (isset($req['params'])) {
 			$stmt = $this->query($sql, $req['params']);
@@ -80,7 +80,7 @@ class Model {
 	public function set($req) {
 		$sql = "INSERT INTO Camagru. $this->table SET ";
 		if (isset($req['to_set'])) {
-			$sql .= $this->put_and($req['to_set'], ',');
+			$sql .= $this->add_SqlParam($req['to_set'], ',');
 		}
 		if (isset($req['params'])) {
 			$this->query($sql, $req['params']);
@@ -89,10 +89,10 @@ class Model {
 
 	/**
 	 *  Permit addition of SQL conditions or param
-	 *  @param $tab all arguments to add 
+	 *  @param $tab all arguments to add
 	 *  @param $delimiter char ',' OR 'AND'..
-	 **/ 
-	public function put_and($tab, $delim) {
+	 **/
+	private function add_SqlParam($tab, $delim) {
 		$sql = null;
 		if (!is_array($tab)) {
 			$sql .= $tab;
@@ -107,17 +107,17 @@ class Model {
 	}
 
 	/**
-	 *  Update a SQL table's row 
+	 *  Update a SQL table's row
 	 *  @param tab['to_update', 'conditions', 'params']
 	 **/
 	public function update($req) {
 		$sql = "UPDATE Camagru. $this->table SET ";
 		if (isset($req['to_update'])) {
-			$sql .= $this->put_and($req['to_update'], ',');
+			$sql .= $this->add_SqlParam($req['to_update'], ',');
 		}
 		if (isset($req['conditions'])) {
 			$sql .= ' WHERE ';
-			$sql .= $this->put_and($req['conditions'], 'AND');
+			$sql .= $this->add_SqlParam($req['conditions'], 'AND');
 		}
 		if (isset($req['params'])) {
 			$this->query($sql, $req['params']);
@@ -135,7 +135,7 @@ class Model {
 
 		if (isset($req['conditions'])) {
 			$sql .= ' WHERE ';
-			$sql .= $this->put_and($req['conditions'], 'AND');
+			$sql .= $this->add_SqlParam($req['conditions'], 'AND');
 		}
 		if (isset($req['params'])) {
 			$this->query($sql, $req['params']);

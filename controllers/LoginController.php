@@ -37,7 +37,9 @@ class Login extends User {
 	public function resetPass($input) {
 		if ($this->userSet($input, ['mail'])) {
 			if ($this->Account->resetSendMail($input['mail'])){
-				$this->session->setFlash('success', "Instructions for recovering your password will be sent you.");
+				$this->session->setFlash('success', "Instructions for recovering your password will be sent to you.");
+				Router::redirect('../login');
+				exit();
 			} else {
 				$this->session->setFlash('danger', "There is no account corresponding to this email.");
 			}
@@ -50,16 +52,25 @@ class Login extends User {
 		if ($user) {
 			if (!empty($input)) {
 				if ($input['new_password'] === $input['confirm_new_password']) {
-					$password = password_hash($input['new_password'], PASSWORD_BCRYPT);
-					$this->Account->resetPass($password, $ret['id']);
-					$this->session->setFlash('success', "Password modified with success !");
-					$this->connect($user);
-					Router::redirect('account');
+					$this->isPass('new_password', $input['confirm_new_password']);
+					if ($this->isValid()) {
+						$password = password_hash($input['new_password'], PASSWORD_BCRYPT);
+						$this->Account->resetPass($password, $ret['id']);
+						$this->session->setFlash('success', "Password modified with success !");
+						$this->connect($user);
+						Router::redirect('../account');
+					} else {
+						$this->getErr();
+					}
+
+				} else {
+					$this->setErr('pass', 'Typing Pass are not the same');
+					$this->getErr();
 				}
 			}
 		} else {
 			$this->session->setFlash('danger', "This token has expired.");
-			Router::redirect('login');
+			Router::redirect('../login');
 			exit();
 		}
 	}

@@ -82,7 +82,7 @@ function photoStream() {
 			context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
 			if (typeof(filter) !== 'undefined') {
-				context.drawImage(filter, 0, 0, 1280, 720);
+				context.drawImage(filter, 0, 0, 500, 375);
 			}
 		}
 	}

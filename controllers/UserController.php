@@ -4,6 +4,7 @@
  * @param $_request tab [controler, action, params]
  * @param $_userSet POST
  **/
+require "core/Form.php";
 class User extends Controller {
 
 	protected	$_request;
@@ -64,55 +65,70 @@ class User extends Controller {
 	/**  DataForm  **/
 
 	public function loadIndexData() {
+		$form = new Form();
+
 		$d = [  'nav_title'		=> 'Connexion',
-				'title' 		=> 'Sign in',
-				'user_input'	=> [
-					'pseudo/mail' 	=> 'text',
-					'password'		=> 'password',
-					'remember'		=> 'checkbox'],
-				'link'			=> 'password forgotten',
-				'Submit_btn' 	=> 'Sign in'];
+				'title' 		=> 'Login',
+				'form'	=> [
+					$form->input('pseudo/mail'),
+					$form->input('password', 'password'),
+					$form->input('remember', 'checkbox'),
+					$form->submit('Sign In')]];
 		$this->set($d);
 	}
 
 	public function loadResetPassData() {
+		$form = new Form();
+
 		$d = [	'nav_title' 	=> "Reset Password",
 				'title'			=> "Oh no! You've forgotten your password...",
-				'user_input'	=> ['mail' => "mail"],
-				'Submit_btn'	=> "Send me a mail" ];
+				'form'	=> [
+					$form->input('mail', 'email'),
+					$form->submit('Send me a mail')]];
+
 		$this->set($d);
 	}
 
 	public function loadRecoverData() {
-		$d = ([	'nav_title' 	=> 'Reset Password',
-				'title'			=> 'new password',
-				'user_input'	=> ['new password' 			=> 'password',
-									'confirm new password'	=> 'password'],
-				'Submit_btn'	=> 'Reset my password']);
+
+		$form = new Form();
+
+		$d = [	'nav_title' 	=> 'Reset Password',
+				'title'			=> 'Set your new Password',
+				'form'			=> [
+					$form->input('new password', 'password'),
+					$form->input('confirm new password','password'),
+					$form->submit('Reset my password')]];
+
 		$this->set($d);
 	}
 
 	public function loadRegisterData() {
+		$form = new Form();
+
 		$d = [  'nav_title'	=> 'Sign up',
 				'title' 	=> 'Sign up',
-				'user_input'	=> [
-					'pseudo' 	=> 'text',
-					'mail'		=> 'mail',
-					'password'	=> 'password'],
-				'Submit_btn' => 'Sign Up'];
+				'form'	=> [
+					$form->input('pseudo'),
+					$form->input('mail', 'email'),
+					$form->input('password', 'password'),
+					$form->submit('Sign Up')]];
 		$this->set($d);
 	}
 
 	public function loadMemberData() {
 		$this->loadModel('Photo');
-		$d = ['nav_title'		=> "Profil",
-					'user_input'	=> [
-						'name' 	=> 'text',
-						'mail'		=> 'text',
-						'pass'	=> 'password'],
-					'notify mail when' 	=> [
-						'comments'	=> 'checkbox'],
-					'submit_btn'	=> 'Confirm changes'];
+
+		$form = new Form($_SESSION['auth']);
+
+		$d = [	'nav_title'		=> "Profil",
+				'form'	=> [
+					$form->input('name'),
+					$form->input('mail', 'email'),
+					$form->input('pass', 'password'),
+					$form->input('acceptMail', 'checkbox', 'Send a mail when somebody comment one of my post'),
+					$form->submit('Confirm changes!')]];
+
 		$this->set($d);
 		$posts = $this->Photo->getPostUser($_SESSION['auth']->account_id);
 		$this->set('selfies', $posts);

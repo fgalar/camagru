@@ -3,18 +3,20 @@
 		<div id="montageView">
 			<video id="video" autoplay></video>
 			<!--  Here we put the user montage preview-->
-			<canvas id="imgPreview" width="1280" height="720" ></canvas>
+			<canvas id="imgPreview" width="500" height="375" ></canvas>
 
-			<div id="snapPhoto">
-				<button id='snapBtn' class='snap' disabled onclick="takePhoto()" >Snap</button>
-				<audio id="snapNoise" class='snap' src="https://freesound.org/data/previews/202/202296_1038806-lq.mp3" hidden></audio>
-			</div>
 			<!--  Upload photo method  -->
 			<div id="uploadPhoto">
 				<form id='upload' action='photobooth/share' formmethod='post' enctype='multipart/form-data'>
-					<input type='file' id='uploader' />
+					<input type='file' id='uploader' accept="image/png, image/jpeg" />
 				</form>
 			</div>
+
+			<div id="snapPhoto">
+				<button id='snapBtn' class='snap' disabled onclick="takePhoto()">Snap</button>
+				<audio id="snapNoise" class='snap' src="https://freesound.org/data/previews/202/202296_1038806-lq.mp3" hidden></audio>
+			</div>
+
 		</div><!--  end montage  -->
 
 		<div id="boxFilter">
@@ -28,9 +30,7 @@
 
 	</div><!--  end main  -->
 	<div id="side" class="photoBox">
-		
 
-		
 	</div> <!--  end side  -->
 </div> <!--  end photobooth -->
 

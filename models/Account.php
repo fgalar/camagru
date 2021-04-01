@@ -131,4 +131,13 @@ class Account extends Model {
 
 	}
 
+	public function resetAcceptMail($wish, $id) {
+
+		$this->update([
+			'to_update'		=>	'account_acceptMail = ?',
+			'conditions'	=>	'account_id = ?',
+			'params'		=>	[$wish, $id]]);
+
+	}
+
 }

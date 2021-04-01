@@ -50,8 +50,17 @@ class Member extends User {
 			}
 		}
 
+		if ($_SESSION['auth']->account_acceptMail == '0' && !empty($_POST['acceptMail']) && ($maj = 1)) {
+			$this->Account->resetAcceptMail(1, $_SESSION['auth']->account_id);
+			$_SESSION['auth']->account_acceptMail = 1;
+		} else if ($_SESSION['auth']->account_acceptMail == '1' && empty($_POST['acceptMail']) && ($maj = 1)) {
+			$this->Account->resetAcceptMail(0, $_SESSION['auth']->account_id);
+			$_SESSION['auth']->account_acceptMail = 0;
+		}
+
 		if ($this->isValid() && $maj > 0) {
 			$this->session->setFlash('success', "maj effectuée");
+			Router::redirect('../account');
 		} else if ($maj > 0) {
 			$this->session->setFlash('danger', 'Opsi, smthg went wrong');
 			$this->getErr();

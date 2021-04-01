@@ -71,14 +71,14 @@ function begForALike(data, action) {
 
 
 	xhr.open('POST', action, true);
-	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	//xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.onreadystatechange = function() {
 
 		// Control states of resquest
 		if (this.readyState == 4 && this.status == 200) {
-			//console.log(this.response);
+			console.log('Request done!');
 		} else {
-			console.log("opsi smthg went wrong");
+			console.log('ReadyState: ' + this.readyState + "\n" + 'Status :' + this.status);
 		}
 
 	}
@@ -136,8 +136,8 @@ function postComment() {
 
 	xhr.onreadystatechange = function() {
 
-		// Control states of resquest
 		if (this.readyState == 4 && this.status == 200) {
+			console.log('Request done!');
 			var lastCom = JSON.parse(this.response.getElementById('dataBox').textContent);
 			const elem = document.createElement('li');
 
@@ -145,7 +145,9 @@ function postComment() {
 			elem.innerHTML = "<h1>"+ lastCom.name + " <i>" + lastCom.comm_writeAt + "</i>" + "</h1>" + "<p>" + lastCom.comm_content + "</p><hr>";
 			comment.insertBefore(elem, comment.firstChild);
 
-		} else { console.log('Opsi, smthg went wrong...'); }
+		} else {
+			console.log('ReadyState: ' + this.readyState + "\n" + 'Status :' + this.status);
+		}
 
 	}
 	xhr.responseType= 'document'

@@ -33,12 +33,14 @@ try {
 		`account_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		`account_name` VARCHAR(20) NOT NULL,
 		`account_mail` VARCHAR(50) NOT NULL,
+		`account_acceptMail` TINYINT(1) DEFAULT 1,
 		`account_pass` VARCHAR(80) NOT NULL,
 		`account_token` VARCHAR(60) NULL,
 		`account_confirmedAt` DATE,
 		`account_tokenResetPass` VARCHAR(60) NULL,
 		`account_resetPassAt` DATE,
 		`account_tokenRememberMe` VARCHAR(255) NULL
+
 	)");
 	echo "Create new users TABLE with success";
 } catch(PDOException $e) {
@@ -87,7 +89,9 @@ try {
 		`like_photoId` INT NOT NULL ,
 		`like_userId` INT NOT NULL ,
 		FOREIGN KEY (like_photoId)
-			REFERENCES photos(photo_id),
+			REFERENCES photos
+		(photo_id)
+			ON DELETE CASCADE,
 		FOREIGN KEY (like_userId)
 			REFERENCES accounts(account_id)
 		)");

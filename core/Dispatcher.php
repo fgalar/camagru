@@ -2,12 +2,13 @@
 
 /**
  * The Dispatcher get the Router object: Array (
- *	[controller]	=> gallery 
- *	[action] 		=> view 
+ *	[controller]	=> gallery
+ *	[action] 		=> view
  *	[params] 		=> Array ( [0] => example ) )
  * and then redirect it through the good controller.
  **/
 require_once './core/functions.php';
+
 class Dispatcher {
 
 	var $request;
@@ -15,7 +16,7 @@ class Dispatcher {
 	function __construct() {
 		$this->request = Router::parse();
 		$controller = $this->loadController($this->request);
-	
+
 		if (!in_array($this->request['action'], get_class_methods($controller))) {
 			$controller->e404('Le controller ' . $this->request['controller'] . " haven't got method: " . $this->request['action']);
 		}
