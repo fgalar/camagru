@@ -1,0 +1,143 @@
+<?php
+    require_once "controllers/Mail.php";
+
+    class Gallery extends Controller
+    {
+        private $_page = 1;
+        protected $likes;
+        protected $comments;
+
+        public function __construct()
+        {
+            parent::__construct();
+
+            $this->likes = $this->loadModel('Like');
+            $this->comments = $this->loadModel('Comment');
+
+            if (isset($_GET['page']) && $_GET['page'] > 0)
+                $this->_page = $_GET['page'];
+        }
+
+        public function default()
+        {
+            $posts = $this->get_posts($this->_page);
+            /*
+                -> nb_page
+                -> current_page
+                -> start_page
+                -> end_page
+                [pictures]
+                    -> id
+                    -> path
+                    -> [likes]
+                        -> req : current_user liked pictures
+                        -> req: count(*) nb likes
+            */
+
+            $this->set(['nav_title' 	=> 'Gallery',
+					    'description'	=> 'Wall of Fame.']);
+            $this->set('posts', $posts);
+
+            $this->render('/gallery');
+        }
+
+        public function get_posts($page)
+        {
+            $posts = new stdClass();
+            $limit = 12;
+            $offset = ($limit * $page) - $limit;
+            $this->pagination($posts, $limit);
+
+            $posts->{'pictures'} = $this->pictures->get_limited_posts(['id', 'path'], $limit, $offset);
+
+            foreach ($posts->pictures as $picture)
+            {
+                $picture->{'nb_likes'} = $this->likes->count_picture_likes($picture->id);
+                if ($current_user = $this->auth->get_auth())
+                    $picture->{'liked_by_current_user'} = $this->likes->is_current_user_liked($picture->id, $current_user);
+                $picture->{'nb_comments'} = $this->comments->count_picture_comments($picture->id);
+                // $picture->{'comment'} = $this->comments->get_comments_for_post($picture->id);
+            }
+            return ($posts);
+        }
+
+        public function pagination($posts, $limit)
+        {
+            $total_posts = $this->pictures->count();
+            $currentPage = $this->_page;
+			$totalPage = ceil($total_posts / $limit);
+
+			$startPage = $currentPage - 4;
+			$endPage = $currentPage + 4;
+
+			if ($startPage <= 0) {
+                $endPage -= $startPage - 1;
+				$startPage = 1;
+			}
+
+			if ($endPage > $totalPage)
+            $endPage = $totalPage;
+
+            $posts->{'nb_pages'} = $totalPage;
+            $posts->{'current_page'} = $currentPage;
+            $posts->{'start_page'} = $startPage;
+            $posts->{'end_page'} = $endPage;
+        }
+
+        public function like()
+        {
+            $post = $_POST['picture'];
+            $user = $this->auth->get_auth()->id;
+
+            $this->likes->add_like($post, $user);
+        }
+
+        public function unlike()
+        {
+            $post = $_POST['picture'];
+            $user = $this->auth->get_auth()->id;
+
+            $this->likes->delete_like($post, $user);
+        }
+
+        public function delete_post()
+        {
+            $post = $_POST['picture'];
+            $user = $this->auth->get_auth()->id;
+
+            $this->pictures->delete_picture($post, $user);
+            unlink('./tools/img'. $post);
+        }
+
+        public function get_comments()
+        {
+            $post = $_POST['picture'];
+            $comments = $this->comments->get_comments_for_post($post);
+            $comments = json_encode($comments);
+            print_r($comments);
+
+            exit();
+        }
+
+        public function add_comment()
+        {
+            $user = $this->auth->get_auth();
+
+            $comment = $_POST['comment'];
+            $picture = $_POST['picture_id'];
+
+            $new_comment = $this->comments->add_comment($user->id, $picture, $comment);
+            $user_posting = $this->pictures->get_author_picture($picture);
+
+            // Send mail to user posting this picture.
+            if ($user_posting->sendmail)
+            {
+                $mail = New Mail();
+                $mail->new_comment_on_post($user_posting, $comment, $user->login);
+            }
+
+            $new_comment = json_encode($new_comment);
+            print_r($new_comment);
+        }
+
+    }

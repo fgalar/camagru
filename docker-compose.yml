@@ -1,0 +1,47 @@
+version: '3.1'
+
+services:
+
+  web:
+    container_name: camagru_app
+    build: vhosts
+    ports:
+      - 80:80
+    volumes:
+      - ./app/:/var/www/html/
+      - ./vhosts/001-app.conf:/etc/apache2/sites-available/app.conf
+    links:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: camagru_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      TZ: Europe/Paris
+    volumes:
+        - db-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: camagru_phpmyadmin
+    restart: always
+    depends_on:
+        - db
+    ports:
+        - 8080:80
+    environment:
+        PMA_HOST: db
+    links:
+        - db
+
+  mailhog:
+      image: mailhog/mailhog:v1.0.0
+      ports:
+        - "1025:1025"
+        - "8025:8025"
+
+volumes:
+  db-data:
