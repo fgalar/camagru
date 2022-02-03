@@ -13,6 +13,7 @@ function postPHP(url, obj, callback = null) {
     xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     params = serialize_params(obj);
+    console.log(params)
 
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 

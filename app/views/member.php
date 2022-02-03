@@ -1,12 +1,12 @@
-<!-- <h1>Bonjour, <?php //$_SESSION['auth']->login; ?></h1> -->
+<div id="formularies">
+	<form method="post" action="<?= $action ?>">
 
-<form method="post" action="<?= $action ?>">
+		<?php foreach ($form as $formbox) : ?>
+			<?= $formbox ;?>
+		<?php endforeach; ?>
 
-	<?php foreach ($form as $formbox) : ?>
-		<?= $formbox ;?>
-	<?php endforeach; ?>
-
-</form>
+	</form>
+</div>
 
 <?php //foreach ($selfies as $selfie): ?>
 	<!--<div class="miniature">

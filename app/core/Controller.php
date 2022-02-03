@@ -64,5 +64,6 @@
                 'nav_title' => 'Not found',
                 'msg' => "403 : " . $msg]);
             $this->render('404');
+            exit();
         }
     }

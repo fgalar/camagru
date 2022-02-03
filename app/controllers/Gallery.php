@@ -106,7 +106,7 @@
             $user = $this->auth->get_auth()->id;
 
             $this->pictures->delete_picture($post, $user);
-            unlink('./tools/img'. $post);
+            unlink($post);
         }
 
         public function get_comments()
@@ -115,8 +115,6 @@
             $comments = $this->comments->get_comments_for_post($post);
             $comments = json_encode($comments);
             print_r($comments);
-
-            exit();
         }
 
         public function add_comment()

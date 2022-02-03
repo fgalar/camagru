@@ -20,6 +20,7 @@
 			{
 				$this->session->setFlash(
                     'success', 'An email has just been sent to you.');
+				$this->auth->logout();
                 Router::redirect('/gallery');
 			} else {
 				$this->session->setFlash('danger', 'Ups, mail not sent for some reason.');

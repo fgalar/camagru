@@ -13,7 +13,8 @@
 			</div>
 
 			<div id="snapPhoto">
-				<button id='snapBtn' class='snap' disabled onclick="takePhoto()">◻︎</button>
+				<!-- FIXME: Disabled/Enabled persistence on reload. -->
+				<button id='snapBtn' class='snap'  onclick="takePhoto()" disabled="" >◻︎</button>
 				<audio id="snapNoise" class='snap' src="https://freesound.org/data/previews/202/202296_1038806-lq.mp3" hidden></audio>
 			</div>
 
@@ -24,13 +25,17 @@
 			<img class="filter" onclick="selectFilter('us_filter')" id='us_filter'src="./tools/img/fltr_us.png" alt="filter">
 			<img class="filter" onclick="selectFilter('ru_filter')" id='ru_filter'src="./tools/img/fltr_ru.png" alt="filter">
 			<img class="filter" onclick="selectFilter('mask_filter')" id='mask_filter'src="./tools/img/fltr_mask.png" alt="filter">
-			<!-- <img class="filter" onclick="selectFilter('donald_filter')" id='donald_filter'src="./tools/img/filterFired.png" alt="filter">
-			<img class="filter" onclick="selectFilter('nasdrovia_filter')" id='nasdrovia_filter'src="./tools/img/filterNasdrovia.png" alt="filter"> -->
 		</div> <!--  end boxFilter  -->
 
 	</div><!--  end main  -->
 	<div id="side" class="photoBox">
-
+		<?php foreach($photos as $post) : ?>
+			<div id="<?= $post->path ?>" class="save_photo">
+				<span id="deleteCross" alt="delete picture" class='clickable' onclick="delete_picture('<?= $post->path ?>')">X</span>
+				<a href="<?= $post->path ?>" download="handsome">
+				<img class="side_img" src="<?= $post->path ?>">
+			</a>
+		</div>
+		<?php endforeach; ?>
 	</div> <!--  end side  -->
 </div> <!--  end photobooth -->
-

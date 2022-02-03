@@ -92,8 +92,9 @@
 			{
 				foreach (array_keys($params) as $column)
 					$cond[] = " $column = :$column ";
-				$req .= 'WHERE' . implode('AND', $cond);
+				$req .= ' WHERE' . implode('AND', $cond);
 			}
+			$req .= "ORDER BY id DESC";
 
 			try {
 				$stmt = $this->_pdo->prepare($req);
