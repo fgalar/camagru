@@ -115,20 +115,34 @@ function reloadImg() {
 function takePhoto(){
 
 	snap['snapNoise'].play();
-	const preview = canvas.toDataURL('image/png');
-	const link = document.createElement('a');
-
-	link.href = preview;
-	link.setAttribute('download', 'handsome');
-	link.textContent = 'Download Image';
-	link.innerHTML = `<img src="${preview}" class="scrolling" alt="Selfie" />`;
-	capture.insertBefore(link, capture.firstChild);
-
+	// remove filter from image
 	reloadImg();
 
 	const data = canvas.toDataURL('image/png');
-	postPhoto(filter.src, data);
-	postPHP('photobooth/share', {selfie: data , filter: filter.src});
+
+	postPhoto(filter.src, data, function(new_photo) {
+		// Add div > span + img;
+		photo_element = document.createElement('div');
+		span = document.createElement('span');
+		img = document.createElement('img');
+
+		photo_element.setAttribute('id', new_photo.path);
+		photo_element.setAttribute('class', "save_photo");
+
+		// TODO: deleteCross must be a class and not an id because is not unique.
+		span.setAttribute('id', "deleteCross");
+		span.setAttribute('class', 'clickable');
+		span.setAttribute('onclick', "delete_picture('"+new_photo.path+"')");
+		span.innerHTML = "X";
+		photo_element.appendChild(span);
+
+		img.src = new_photo.path;
+		img.setAttribute('class', 'side_img');
+		photo_element.appendChild(img);
+
+		capture.insertBefore(photo_element, capture.firstChild);
+	});
+
 	if (method == 'photo') {
 		selectFilter(filter.id);
 	}
@@ -136,7 +150,9 @@ function takePhoto(){
 }
 
 // Send datas photo to php server with post method
-function postPhoto(choosenFilter, data) {
+function postPhoto(choosenFilter, data, callback=null) {
+	// TODO: #doublon Voir pour formData all post requests
+
 	xhr = new XMLHttpRequest();
 	formData = new FormData();
 
@@ -144,6 +160,18 @@ function postPhoto(choosenFilter, data) {
 	formData.append('filter', choosenFilter);
 
 	xhr.open('POST', 'photobooth/share', true);
+
+	xhr.onload = function() {
+        if (xhr.status==200) {
+            if (callback){
+                callback(JSON.parse(this.response));
+            }
+			console.log('Request done!');
+
+        } else {
+            console.log('ReadyState: ' + this.readyState + "\n" + 'Status :' + this.status);
+        }
+    }
 
 	xhr.send(formData);
 }
@@ -161,89 +189,15 @@ if (typeof(uploader) !== 'undefined') {
 
 }
 
+function delete_picture(path) {
+	console.log(path)
 
+	// TODO : Fonction doublon gallery et photobooth
+	// if (confirm('You’re about to erase that image, are you sure')){
 
+		postPHP('gallery/delete_post', {picture: path});
+		var post = document.getElementById(path);
+		post.classList.toggle('hidden');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function paintToCanvas() {
-// 	const width = video.videoWidth;
-// 	const height = video.videoHeight;
-// 	canvas.width = width;
-// 	canvas.height = height;
-
-// 	return setInterval(() => {
-// 		ctx.drawImage(video, 0, 0, width, height);
-// 		//take de pixels out
-// 		let pixels = ctx.getImageData(0, 0, width, height);
-// 		//mess with them
-// 		//pixels = redEffect(pixels);
-// 		pixels = rgbSplit(pixels);
-// 		//ctx.globalAlpha = 0.1;
-// 		// put them back
-// 		ctx.putImageData(pixels, 0, 0);
-// 	}, 16);
-// }
-
-// function takePhoto() {
-// 	// played the sound
-// 	snap.currentTime = 0;
-// 	snap.play();
-// 	// take the data out of the canvas
-// 	const data = canvas.toDataURL('image/jpeg');
-// 	const link = document.createElement('a');
-// 	link.href = data;
-// 	link.setAttribute('download', 'handsome');
-// 	link.innerHTML = `<img src="${data}" alt="Picture" />`;
-// 	strip.insertBefore(link, strip.firstChild);
-// }
-
-// function redEffect(pixels) {
-// 	var red = getColor("red");
-// 	var green = getColor("green");
-// 	var blue = getColor("blue");
-// 	for (let i = 0; i < pixels.data.length; i += 4) {
-// 		pixels.data[i + 0] = pixels.data[i + 0] - red; //red -> cyan
-// 		pixels.data[i + 1] = pixels.data[i + 1] - green;  //green -> rose
-// 		pixels.data[i + 2] = pixels.data[i + 2] - blue; //blue -> jaune
-// 	}
-// 	return pixels;
-// }
-
-// function rgbSplit(pixels) {
-// 	var split = getColor("alpha");
-// 	for (let i = 0; i < pixels.data.length; i += 4) {
-// 		pixels.data[i - split] = pixels.data[i + 0]; //red
-// 		pixels.data[i + 100] = pixels.data[i + 1]; //green
-// 		pixels.data[i - split] = pixels.data[i + 2]; //blue
-// 	}
-// 	return pixels;
-// }
-
-// function getColor(color) {
-// 	slider = document.getElementById(color);
-// 	return slider.value;
-// }
-
+	// }
+}

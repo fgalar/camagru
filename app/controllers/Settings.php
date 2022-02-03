@@ -7,6 +7,8 @@ class Settings extends Controller {
     public function __construct($data)
     {
         parent::__construct();
+        if (!$this->userRunning())
+			$this->not_authorized();
         $this->_form = new Form();
     }
 
@@ -35,7 +37,7 @@ class Settings extends Controller {
         foreach($_POST as $field=>$post)
         {
             if (!empty($post))
-            {    
+            {
                 $input[$field] = $post;
                 if ($field !== 'sendmail')
                 {

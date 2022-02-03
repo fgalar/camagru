@@ -49,4 +49,9 @@
             return $stmt->fetch();
         }
 
+        public function get_all_pictures_by_user($user_id)
+        {
+            return $this->select_all(['user_id' => $user_id]);
+        }
+
     }

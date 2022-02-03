@@ -1,7 +1,9 @@
-<h1><?= $title ?></h1>
+<div id="formularies">
+	<h1><?= $title ?></h1>
 
-<form method="post" action=<?= $action ?>>
-	<?php foreach ($form as $formbox) :?>
-		<?= $formbox ?>
-	<?php endforeach ;?>
-</form>
+	<form method="post" action=<?= $action ?>>
+		<?php foreach ($form as $formbox) :?>
+			<?= $formbox ?>
+		<?php endforeach ;?>
+	</form>
+</div>

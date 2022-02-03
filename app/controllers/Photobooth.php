@@ -8,13 +8,15 @@ class Photobooth extends Controller {
 	public function __construct() {
 		parent::__construct();
 		if (!$this->userRunning())
-			$this->not_authorized();
+			Router::redirect('/account/signin');
 	}
 
 	public function default() {
 		$d = [  'nav_title'		=> 'Photobooth',
 				'title' 		=> 'Photobooth'];
+		$pictures = $this->pictures->get_all_pictures_by_user($this->auth->get_auth()->id);
 		$this->set($d);
+		$this->set('photos', $pictures);
 		$this->render('photobooth');
 	}
 
@@ -23,7 +25,10 @@ class Photobooth extends Controller {
 		if (isset($_POST)) {
 
 			$path_picture = $this->blendFilter($_POST['selfie'], $_POST['filter']);
-			$this->pictures->add_picture($this->auth->get_auth()->id, $path_picture);
+			$new_picture = $this->pictures->add_picture($this->auth->get_auth()->id, $path_picture);
+			$new_picture = json_encode($new_picture);
+			print_r($new_picture);
+
 		}
 
 	}
@@ -52,10 +57,6 @@ class Photobooth extends Controller {
 		imagepng($dst_img, $url, 0);
 
 		return $url;
-	}
-
-	public function blendFilter2($selfie, $filter) {
-
 	}
 
 }

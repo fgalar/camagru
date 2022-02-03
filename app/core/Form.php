@@ -140,7 +140,7 @@
 				$this->_errors[$field] = "Password field is empty.";
 			}
 			if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9-]{8,64}$/", $pass)) {
-				$this->_errors[$field] = "Password must contain a number and at least 8 characters. An uppercase, and a number.";
+				$this->_errors[$field] = "Password must contain a number and at least 8 no special characters. An uppercase, and a number.";
 			}
 		}
 
