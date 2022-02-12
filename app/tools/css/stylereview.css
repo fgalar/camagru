@@ -11,12 +11,14 @@
 		font-weight: 200;     /*  largeur de la police  */
 		line-height: 1.6;     /*  espacement des lignes conseillées par w3school    */
 		letter-spacing: .1em; /*  augmentation de l'ecart entre les lettres de 10%  */
-		box-sizing: border-box;
+		/* box-sizing: border-box; */
 	}
 
 	body {
 		display: flex;
 		flex-direction: column;
+		width: -moz-fit-content;
+		width: fit-content;
 	}
 
 	img {
@@ -655,5 +657,12 @@
 		/*****  gallery  *****/
 		figure {
 			max-width: 25%;
+		}
+	}
+
+
+	@media screen and (-webkit-min-device-pixel-ratio:0) { 
+		.filter {
+			width: 20%;
 		}
 	}
