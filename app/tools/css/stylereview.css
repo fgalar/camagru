@@ -17,8 +17,8 @@
 	body {
 		display: flex;
 		flex-direction: column;
-		width: -moz-fit-content;
-		width: fit-content;
+		/* width: -moz-fit-content;
+		width: fit-content; */
 	}
 
 	img {
@@ -247,7 +247,7 @@
 
 			color: white;
 			font-weight: bold;
-			font-size: 16px;
+			font-size: 1.2rem;
 			transition: all 0.3s ease-in-out;
 		}
 
@@ -271,7 +271,7 @@
 			background: #2d3436;
 			top: 0;
 			left: 0;
-			z-index: 1;
+			z-index: 2;
 		}
 
 		.nav.active ul {
@@ -279,7 +279,7 @@
 		}
 
 /*****  gallery *****/
-	.gallery {
+	#gallery {
 		display: flex;
 		flex-flow: row wrap;
 		justify-content: center;
@@ -326,15 +326,21 @@
 	}
 
 	#deleteCross {
-		position: relative;
+		/* position: relative;
 		top: -25px;
 		padding: 0px 20px;
 		height: 5px;
 
 		color: darkgrey;
-		font-size: 30px;
 		font-weight: bold;
-		text-align: end;
+		text-align: end; */
+		position:absolute;
+		font-size: 1.2rem;
+		top: 0;
+		right: 0;
+		padding: 0px 2px;
+		color: darkgray;
+		font-weight: bold;
 	}
 
 	#deleteCross:hover + .msg {
@@ -432,7 +438,7 @@
 		text-align: center;
 
 		padding: 16px 32px;
-		font-size: 16px;
+		font-size: 1.2rem;
 		margin: 4px 2px;
 		transition-duration: 0.4s;
 		cursor: pointer;
@@ -464,7 +470,7 @@
 		top: -1rem;
 		right: 1rem;
 		color: darkgray;
-		font-size: 40px;
+		font-size: 1.2rem;
 		font-weight: bold;
 		transition: 0.3s;
 	}
@@ -487,7 +493,7 @@
 	}
 
 /*****  photobooth  *****/
-	.photobooth {
+	#photobooth {
 		position: relative;
 		top:15%;
 		z-index: 1;
@@ -514,11 +520,10 @@
 		cursor: pointer;
 	}
 
-	.main {
+	#main {
 		display: flex;
 		flex-direction: column;
 	}
-
 
 	#montageView {
 		/* border: thin #c0c0c0 solid;
@@ -530,9 +535,6 @@
 
 	#imgPreview {
 		width: 100%;
-		margin: 0;
-		padding: 0;
-		height: 100%;
 	}
 
 	#snapPhoto {
@@ -544,7 +546,6 @@
 		transform: translateX(-50%);
 	}
 
-
 	#boxFilter {
 		display: flex;
 		justify-content: space-between;
@@ -552,22 +553,13 @@
 
 		/* background-color: pink; */
 	}
+
 	.filter {
-		/* max-width: 9em; */
 		padding-top: 20px;
 		border-radius: 50%;
-		border: thin #c0c0c0 solid;
-		/* height: 4pc; */
+		border: thin darkgray solid;
 		margin: 0px 15px;
 	}
-
-	/* #photoBox {
-		display: flex;
-		flex-flow: column nowrap;
-		width: 100%;
-		overflow: scroll;
-		margin: 5px 5px;
-	} */
 
 	.photoBox {
 		display: none;
@@ -585,74 +577,95 @@
 		}
 
 		/* Menu */
-		.nav {
-			display: flex;
-			align-items: center;
-			justify-content: flex-end;
-			margin-left: 0;
-			margin-top: 10px;
+			.nav {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				margin-left: 0;
+				margin-top: 10px;
 
-			width: 100vw;
-			height: 5vh;
-		}
+				width: 100vw;
+				height: 5vh;
+			}
 
-		.nav ul {
-			display: flex;
-			flex-flow: row nowrap;
-			justify-content: space-between;
+			.nav ul {
+				display: flex;
+				flex-flow: row nowrap;
+				justify-content: space-between;
 
-		}
+			}
 
-		.menu a {
-			color: black;
-		}
+			.menu a {
+				color: black;
+			}
 
-		.nav a:hover {
-			color: deeppink;
-		}
+			.nav a:hover {
+				color: deeppink;
+			}
 
 		/* photobooth */
 
-		.photobooth {
-			flex-flow: unset;
-			width: 90%;
-			max-width:1300px;
-		}
+			#photobooth {
+				top: 0;
+				flex-flow: row nowrap;
+				justify-content: space-between;
+				width: 80%;
+				/* align-items: self-start; */
+				max-height: 900px;
+			}
 
-		.main {
-			width: 80%;
-			max-width: 660px;
+			#photobooth > div {
+				margin: 1%;
+				flex: 1 0 25%;
+			}
 
-			height: 100%;
-			max-height: 650px;
-		}
+			#main {
+				width: 80%;
+				padding: 15px 0px;
+				min-width: 530px;
+				max-width: 930px;
 
-		.photoBox {
-			/* display previews photos */
-			display: flex;
-			flex-flow: column nowrap;
-			background-color: whitesmoke;
+				/* height: 100%; */
+				min-height:530px;
+				max-height: 900px;
 
-			overflow-y: scroll;
-			padding: 5px 5px;
-			width: 20%;
-			height: 100%;
-			max-height: 640px;
-		}
+				border: thin darkgray solid;
+				justify-content: space-between;
+				box-shadow: 10px 10px 20px black;
 
-		.side_img {
-			width:100%;
-		}
+				align-self: cemter;
+			}
 
-		.save_photo {
-			position: relative;
-		}
+			#montageView {
+				width: 95%;
+				margin: auto;
+			}
 
-		.save_photo #deleteCross {
-			position: absolute;
-			top: 0;
-			right: 0;
-		}
+			#boxFilter {
+				margin: auto;
+				width: 90%;
+			}
+
+			.photoBox {
+				/* display previews photos */
+				display: flex;
+				flex-flow: column nowrap;
+
+				overflow-y: scroll;
+				padding: 5px 5px;
+				height: 95%;
+				border: thin darkgray solid;
+				flex-basis: fit-content;
+				align-self: stretch;
+			}
+
+			.side_img {
+				width:100%;
+			}
+
+			.save_photo {
+				position: relative;
+			}
 
 		/*****  gallery  *****/
 		figure {
@@ -661,8 +674,8 @@
 	}
 
 
-	@media screen and (-webkit-min-device-pixel-ratio:0) { 
+	@media screen and (-webkit-min-device-pixel-ratio:0) {
 		.filter {
-			width: 20%;
+			width: 19%;
 		}
 	}

@@ -1,5 +1,5 @@
 <h2><?= $description; ?></h2>
-<div class="gallery">
+<div id="gallery">
 <?php foreach($posts->pictures as $post) : ?>
 	<figure id="<?= $post->path ?>">
 	<?php if ($this->auth->get_auth() && str_contains($post->path, "/".$this->auth->get_auth()->login."/")):?>
@@ -26,7 +26,7 @@
 
 	</figure>
 <?php endforeach; ?>
-</div>
+
 <!-- Paging -->
 <?php if ($posts->end_page > 1 ):?>
 <nav>
@@ -50,6 +50,7 @@
 <h3 class="empty">No picture ... </h3>
 <?php endif; ?>
 <!-- end Paging -->
+</div>
 <!-- Modal -->
 <div id="myModal" class="modal">
 	<div class="modal-content">
