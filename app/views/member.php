@@ -7,7 +7,7 @@
 
 	</form>
 </div>
-
+<!-- TODO: REMOVE -->
 <?php //foreach ($selfies as $selfie): ?>
 	<!--<div class="miniature">
 		<span class="remove">&times;</span>

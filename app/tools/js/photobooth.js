@@ -119,9 +119,10 @@ function takePhoto(){
 	reloadImg();
 
 	const data = canvas.toDataURL('image/png');
-
+	console.log(filter.src)
 	postPhoto(filter.src, data, function(new_photo) {
 		// Add div > span + img;
+
 		photo_element = document.createElement('div');
 		span = document.createElement('span');
 		img = document.createElement('img');
@@ -133,7 +134,7 @@ function takePhoto(){
 		span.setAttribute('id', "deleteCross");
 		span.setAttribute('class', 'clickable');
 		span.setAttribute('onclick', "delete_picture('"+new_photo.path+"')");
-		span.innerHTML = "X";
+		span.innerHTML = "×";
 		photo_element.appendChild(span);
 
 		img.src = new_photo.path;

@@ -1,5 +1,5 @@
-<div class="photobooth">
-	<div class="main" >
+<div id="photobooth">
+	<div id="main" >
 		<div id="montageView">
 			<video id="video" autoplay></video>
 			<!--  Here we put the user montage preview-->
@@ -21,17 +21,17 @@
 		</div><!--  end montage  -->
 
 		<div id="boxFilter">
-			<img class="filter" onclick="selectFilter('fr_filter')" id='fr_filter'src="./tools/img/fltr_fr.png" alt="filter">
-			<img class="filter" onclick="selectFilter('us_filter')" id='us_filter'src="./tools/img/fltr_us.png" alt="filter">
-			<img class="filter" onclick="selectFilter('ru_filter')" id='ru_filter'src="./tools/img/fltr_ru.png" alt="filter">
-			<img class="filter" onclick="selectFilter('mask_filter')" id='mask_filter'src="./tools/img/fltr_mask.png" alt="filter">
+			<img class="filter" onclick="selectFilter('fr_filter')" id='fr_filter' src="./tools/img/fltr_fr.png" alt="filter">
+			<img class="filter" onclick="selectFilter('us_filter')" id='us_filter' src="./tools/img/fltr_us.png" alt="filter">
+			<img class="filter" onclick="selectFilter('ru_filter')" id='ru_filter' src="./tools/img/fltr_ru.png" alt="filter">
+			<img class="filter" onclick="selectFilter('mask_filter')" id='mask_filter' src="./tools/img/fltr_mask.png" alt="filter">
 		</div> <!--  end boxFilter  -->
 
 	</div><!--  end main  -->
 	<div id="side" class="photoBox">
 		<?php foreach($photos as $post) : ?>
 			<div id="<?= $post->path ?>" class="save_photo">
-				<span id="deleteCross" alt="delete picture" class='clickable' onclick="delete_picture('<?= $post->path ?>')">X</span>
+				<span id="deleteCross" alt="delete picture" class='clickable' onclick="delete_picture('<?= $post->path ?>')">×</span>
 				<a href="<?= $post->path ?>" download="handsome">
 				<img class="side_img" src="<?= $post->path ?>">
 			</a>
