@@ -7,7 +7,7 @@
 		<!-- Camagru Icon -->
 		<link rel="icon" href="./tools/img/icon.png">
 		<!-- My Stylesheets -->
-		<link rel="stylesheet" type="text/css" href="./tools/css/stylereview.css">
+		<link rel="stylesheet" type="text/css" href="./tools/css/style.css">
 		<!-- Élément spécifique -->
 		<title><?= $nav_title ?></title>
 		<!-- Fin d'Élément spécifique -->

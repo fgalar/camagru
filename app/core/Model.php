@@ -173,7 +173,6 @@
 			}
 
 			try {
-				debug($req);
 				$stmt = $this->_pdo->query($req);
 				return $stmt->fetch(PDO::FETCH_ASSOC);
 			} catch (PDOException $e) {

@@ -12,15 +12,24 @@
             return (int) $this->count_element();
         }
 
-        public function get_limited_posts($field, $limit, $offset)
+        public function get_limited_posts($field, $limit)
         {
             $pdo = $this->get_pdo();
             $table = strtolower(get_class($this)) . 's';
 
-            $sql = "SELECT " . implode(', ', $field) . " FROM $table ORDER BY id DESC LIMIT $limit OFFSET $offset ";
+            $sql = "SELECT " . implode(', ', $field) . " FROM $table ORDER BY id DESC LIMIT $limit";
             $stmt = $pdo->query($sql);
             return $stmt->fetchAll();
 
+        }
+
+        public function get_limited_posts_before_id($field, $last_id, $limit) {
+            $pdo = $this->get_pdo();
+            $table = strtolower(get_class($this)) . 's';
+
+            $sql = "SELECT " . implode(' ,', $field) . " FROM $table WHERE id < $last_id ORDER BY id DESC LIMIT $limit";
+            $stmt = $pdo->query($sql);
+            return $stmt->fetchAll();
         }
 
         public function add_picture($user_id, $path)
