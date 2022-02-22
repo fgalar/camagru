@@ -3,7 +3,7 @@
 
     class Gallery extends Controller
     {
-        private $_page = 1;
+        // private $_page = 1;
         protected $likes;
         protected $comments;
 
@@ -14,13 +14,13 @@
             $this->likes = $this->loadModel('Like');
             $this->comments = $this->loadModel('Comment');
 
-            if (isset($_GET['page']) && $_GET['page'] > 0)
-                $this->_page = $_GET['page'];
+            // if (isset($_GET['page']) && $_GET['page'] > 0)
+            //     $this->_page = $_GET['page'];
         }
 
         public function default()
         {
-            $posts = $this->get_posts($this->_page);
+            $posts = $this->get_posts();
             /*
                 -> nb_page
                 -> current_page
@@ -41,48 +41,50 @@
             $this->render('/gallery');
         }
 
-        public function get_posts($page)
+        public function get_posts()
         {
             $posts = new stdClass();
-            $limit = 12;
-            $offset = ($limit * $page) - $limit;
-            $this->pagination($posts, $limit);
+            $limit = 9;
+            // $offset = ($limit * $page) - $limit;
+            // $this->pagination($posts, $limit);
 
-            $posts->{'pictures'} = $this->pictures->get_limited_posts(['id', 'path'], $limit, $offset);
+            $posts->{'pictures'} = $this->pictures->get_limited_posts(['id', 'path'], $limit);
 
             foreach ($posts->pictures as $picture)
             {
                 $picture->{'nb_likes'} = $this->likes->count_picture_likes($picture->id);
                 if ($current_user = $this->auth->get_auth())
                     $picture->{'liked_by_current_user'} = $this->likes->is_current_user_liked($picture->id, $current_user);
+                else
+                    $picture->{'liked_by_current_user'} = false;
                 $picture->{'nb_comments'} = $this->comments->count_picture_comments($picture->id);
                 // $picture->{'comment'} = $this->comments->get_comments_for_post($picture->id);
             }
             return ($posts);
         }
 
-        public function pagination($posts, $limit)
-        {
-            $total_posts = $this->pictures->count();
-            $currentPage = $this->_page;
-			$totalPage = ceil($total_posts / $limit);
+        // public function pagination($posts, $limit)
+        // {
+        //     $total_posts = $this->pictures->count();
+        //     $currentPage = $this->_page;
+		// 	$totalPage = ceil($total_posts / $limit);
 
-			$startPage = $currentPage - 4;
-			$endPage = $currentPage + 4;
+		// 	$startPage = $currentPage - 4;
+		// 	$endPage = $currentPage + 4;
 
-			if ($startPage <= 0) {
-                $endPage -= $startPage - 1;
-				$startPage = 1;
-			}
+		// 	if ($startPage <= 0) {
+        //         $endPage -= $startPage - 1;
+		// 		$startPage = 1;
+		// 	}
 
-			if ($endPage > $totalPage)
-            $endPage = $totalPage;
+		// 	if ($endPage > $totalPage)
+        //     $endPage = $totalPage;
 
-            $posts->{'nb_pages'} = $totalPage;
-            $posts->{'current_page'} = $currentPage;
-            $posts->{'start_page'} = $startPage;
-            $posts->{'end_page'} = $endPage;
-        }
+        //     $posts->{'nb_pages'} = $totalPage;
+        //     $posts->{'current_page'} = $currentPage;
+        //     $posts->{'start_page'} = $startPage;
+        //     $posts->{'end_page'} = $endPage;
+        // }
 
         public function like()
         {
@@ -98,15 +100,6 @@
             $user = $this->auth->get_auth()->id;
 
             $this->likes->delete_like($post, $user);
-        }
-
-        public function delete_post()
-        {
-            $post = $_POST['picture'];
-            $user = $this->auth->get_auth()->id;
-
-            $this->pictures->delete_picture($post, $user);
-            unlink($post);
         }
 
         public function get_comments()
@@ -136,6 +129,37 @@
 
             $new_comment = json_encode($new_comment);
             print_r($new_comment);
+        }
+
+        public function get_posts_before_id() {
+            /* _____ Return Object _____
+                [pictures]
+                    -> id
+                    -> path
+                    -> [likes]
+                        -> current_user liked pictures
+                        -> nb likes
+            */
+            if ($_POST) {
+                $posts = new stdClass();
+                $nb_require = $_POST['nb'];
+                $last_id = $_POST['last_id'];
+
+                $posts->{'pictures'} = $this->pictures->get_limited_posts_before_id(['id', 'path'], $last_id, $nb_require);
+
+                foreach ($posts->pictures as $picture)
+                {
+                    $picture->{'nb_likes'} = $this->likes->count_picture_likes($picture->id);
+                    if ($current_user = $this->auth->get_auth())
+                        $picture->{'liked_by_current_user'} = $this->likes->is_current_user_liked($picture->id, $current_user);
+                    else
+                        $picture->{'liked_by_current_user'} = false;
+                    $picture->{'nb_comments'} = $this->comments->count_picture_comments($picture->id);
+                }
+
+                $posts = json_encode($posts);
+                print_r($posts);
+            }
         }
 
     }

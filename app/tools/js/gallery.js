@@ -6,6 +6,8 @@ var modalImg = document.getElementById('img01');
 var close = document.getElementsByClassName("close")[0];
 var imgID		= 0;
 
+var gallery = document.querySelector('#gallery')
+
 // Open modal on photo click
 	function focusImg(photo) {
 
@@ -74,17 +76,6 @@ var imgID		= 0;
 
 	}
 
-	function delete_picture(path) {
-
-		if (confirm('You’re about to erase that image, are you sure')){
-
-			postPHP('gallery/delete_post', {picture: path});
-			var post = document.getElementById(path);
-			post.classList.toggle('hidden');
-
-		}
-	}
-
 	function get_comments(post_id) {
 
 		postPHP('gallery/get_comments', {picture: post_id}, function(comments) {
@@ -118,3 +109,74 @@ var imgID		= 0;
 		})
 
 	}
+
+// infinite scroll
+window.addEventListener('scroll', () => {
+	// scrollTop : ce qu'on a scrollé depuis le top
+	// scrollHeight : La hauteur total qui peut etre scroller par le client.
+	// clientHieght : Hauteur visible du screen du client
+	const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+
+	if (clientHeight + scrollTop === scrollHeight) {
+		add_pictures(3);
+	}
+})
+
+function add_pictures(nb) {
+	var last_id = get_page_last_picture();
+
+	postPHP('gallery/get_posts_before_id', { 'last_id': last_id, 'nb': nb },
+			(new_element) => {
+				if (typeof(new_element) !== 'undefined')
+				{
+					nb = new_element.pictures.length;
+					// console.log(new_element.pictures.length)
+					for (let i = 0; i < nb; i++) {
+						var figure = document.querySelector('figure').cloneNode([true]);
+						figure.setAttribute('id', new_element.pictures[i].path);
+
+						img = figure.querySelector('img');
+						img.setAttribute('id', new_element.pictures[i].id);
+						img.src = new_element.pictures[i].path;
+						img.addEventListener('click', function() {
+							img.onclick = focusImg(img);
+						});
+
+						figcaption = figure.querySelector('figcaption');
+						figcaption.setAttribute('id', "caption"+ new_element.pictures[i].id);
+
+						button = figcaption.querySelector('button');
+						button.setAttribute('onclick', "switch_like("+ new_element.pictures[i].id +")");
+
+						if (typeof(new_element.pictures[i].liked_by_current_user) !== 'undefined') {
+							like = button.querySelector('.like');
+							unlike = button.querySelector('.unlike');
+							if (new_element.pictures[i].liked_by_current_user == false) {
+								like.setAttribute('class', 'icon like');
+								unlike.setAttribute('class', 'icon unlike hidden');
+							} else if (new_element.pictures[i].liked_by_current_user == true) {
+								like.setAttribute('class', 'icon like hidden');
+								unlike.setAttribute('class', 'icon unlike');
+							}
+						}
+
+						nb_like = button.querySelector('p');
+						nb_like.innerHTML = new_element.pictures[i].nb_likes;
+
+						comment = figcaption.querySelector('.com');
+						comment.setAttribute('alt', new_element.pictures[i].id);
+
+						nb_comment = figcaption.querySelector('.nbCom');
+						nb_comment.innerHTML =  new_element.pictures[i].nb_comments
+
+						gallery.appendChild(figure);
+					}
+				}
+	})
+
+}
+
+function get_page_last_picture() {
+	var images = document.querySelectorAll('.photo');
+	return images[images.length - 1].id;
+}

@@ -9,8 +9,11 @@ var method = undefined;
 var userImg = undefined;
 var uploader = document.getElementById('uploader');
 var img = undefined;
-// Get access to camera!
+//	0 - Disabled snapshot button onreload (for firefox persistance cache attribute)
+snap["snapBtn"].setAttribute('disabled', "");
+
 function getVideo() {
+	// Get access to camera!
 	navigator.mediaDevices.getUserMedia({
 		audio: false,
 		video: {
@@ -19,32 +22,33 @@ function getVideo() {
 		}}).then(function(stream) {
 		video.srcObject = stream;
 		video.play();
-		console.log(stream);
 	}).catch(err => {
 		console.log(err.name + ": " + err.message);
 	})
 }
 
-/** Displayer Tools **/
 function onPreview(stream) {
+	/** Displayer Tools **/
 
 	method = stream;
 
+	// Hide all upload tools
 	if (method == 'video') {
-		uploaderDiv = document.getElementById('uploadPhoto');
-		uploaderDiv.setAttribute('style', "display: none;");
+		display_upload = document.getElementById('uploadPhoto');
+		display_upload.setAttribute('style', "display: none;");
 	}
-	canvas.setAttribute('style', "display: flex;");
 
 }
 
 function selectFilter(filterName) {
 
-	snap["snapBtn"].removeAttribute('disabled');
+	if (userImg || method == 'video')
+		snap["snapBtn"].removeAttribute('disabled');
 
+	// remove selected filter color
 	if (prev_filter = document.querySelector('.selected-item'))
 		prev_filter.classList.toggle('selected-item');
-
+	// set colored selected filter
 	filter = document.getElementById(filterName);
 	filter.classList.toggle('selected-item');
 	if (method == 'photo') {
@@ -72,57 +76,112 @@ function videoStream() {
 }
 
 function photoStream() {
-
+	console.log("photoStream");
 	onPreview('photo');
+	if (this.files && this.files[0].size > 2097152) {
 
-	if (this.files && this.files[0] || typeof(userImg) != 'undefined') {
+		alert("File is too big! Choose another one.");
+		snap["snapBtn"].setAttribute('disabled', "");
+		uploader.value = "";
+
+	} else if (this.files && this.files[0] || typeof(userImg) != 'undefined') {
 
 		if (this.files)
 			userImg = window.URL.createObjectURL(this.files[0]);
-
 
 		img = new Image();
 		img.src = userImg;
 
 		img.onload = function() {
+			canvas.width = 640;
+			canvas.height = 480;
+			context.fillStyle = 'black';
+			context.fillRect(0, 0, canvas.width, canvas.height)
 
-			canvas.width = img.width;
-			canvas.height = img.height;
-			context.drawImage(img, 0, 0, img.width, img.height);
+			var ratio_cvs_img = get_ratio(canvas, img);
+			var img_lenghts = dimension_adapter(canvas, img, ratio_cvs_img);
 
 			if (typeof(filter) !== 'undefined') {
-
-				context.drawImage(filter, (canvas.width - 640), (canvas.height - 480));
-
+				var ratio_img_flt = get_ratio(img_lenghts, filter);
+				if (img_lenghts.height >= canvas.height) {
+					put_filter_in_bottom_center(canvas, filter, ratio_img_flt);
+				} else {
+					put_filter_in_middle_center(canvas, filter, ratio_img_flt, img_lenghts);
+				}
 			}
 		}
 	}
 
 }
 
+function get_ratio(dst, src) {
+	var ratioX = dst.width / src.width;
+	var ratioY = dst.height / src.height;
+	return Math.min(ratioX, ratioY)
+}
+
+function put_filter_in_middle_center(dst, src, ratio, lenght_src) {
+	context.drawImage(src,
+		(dst.width / 2) - ((src.width * ratio) / 2),	//dst_x : center align
+		(dst.height/2) - ((lenght_src.height) / 2),
+		src.width * ratio, src.height * ratio
+	)
+	return { width: src.width * ratio,
+		height: src.height * ratio};
+}
+
+function put_filter_in_bottom_center(dst, src, ratio) {
+	context.drawImage(src,
+		(dst.width / 2) - ((src.width * ratio) / 2),
+		dst.height - src.height * ratio,
+		src.width * ratio, src.height * ratio);
+	return { width: src.width * ratio,
+			 height: src.height * ratio};
+}
+
+function dimension_adapter(dst, src, ratio) {
+
+
+	context.drawImage(src,
+		(dst.width / 2) - ((src.width * ratio) / 2),	// dest_x : center of dst
+		 dst.height/2 - (src.height * ratio) /2,		// dest_y : center of dst
+		 src.width * ratio, src.height * ratio			// dest_width, dest_height
+	);
+
+
+	return { width: src.width * ratio,
+			 height: src.height * ratio};
+}
+
 function reloadImg() {
 
 	if (method == 'video'){
 		context.drawImage(video, 0, 0, canvas.width, canvas.height);
+	} else if (method == 'photo') {
+		ratio = get_ratio(canvas, img);
+		canvas = document.createElement('canvas');
+		canvas.width = img.width * ratio;
+		canvas.height = img.height * ratio;
+		ctx = canvas.getContext('2d');
+		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 	}
-	if (method == 'photo') {
-		context.drawImage(img, 0, 0, canvas.width, canvas.height);
-	}
-
 }
 
 // Take a snapshot
 function takePhoto(){
-
+	console.log("takePhoto");
 	snap['snapNoise'].play();
+
+	const flt_url = filter.src
 	// remove filter from image
 	reloadImg();
+	const img_url = canvas.toDataURL('image/png');
 
-	const data = canvas.toDataURL('image/png');
-	console.log(filter.src)
-	postPhoto(filter.src, data, function(new_photo) {
+	postPHP('photobooth/share', {'filter': flt_url,'selfie' :img_url},
+			   function(new_photo) {
 		// Add div > span + img;
-
+		console.log(new_photo)
+		canvas = document.getElementById('imgPreview');
 		photo_element = document.createElement('div');
 		span = document.createElement('span');
 		img = document.createElement('img');
@@ -130,9 +189,7 @@ function takePhoto(){
 		photo_element.setAttribute('id', new_photo.path);
 		photo_element.setAttribute('class', "save_photo");
 
-		// TODO: deleteCross must be a class and not an id because is not unique.
-		span.setAttribute('id', "deleteCross");
-		span.setAttribute('class', 'clickable');
+		span.setAttribute('class', 'clickable deleteCross');
 		span.setAttribute('onclick', "delete_picture('"+new_photo.path+"')");
 		span.innerHTML = "×";
 		photo_element.appendChild(span);
@@ -144,61 +201,23 @@ function takePhoto(){
 		capture.insertBefore(photo_element, capture.firstChild);
 	});
 
-	if (method == 'photo') {
-		selectFilter(filter.id);
-	}
-
-}
-
-// Send datas photo to php server with post method
-function postPhoto(choosenFilter, data, callback=null) {
-	// TODO: #doublon Voir pour formData all post requests
-
-	xhr = new XMLHttpRequest();
-	formData = new FormData();
-
-	formData.append('selfie', data);
-	formData.append('filter', choosenFilter);
-
-	xhr.open('POST', 'photobooth/share', true);
-
-	xhr.onload = function() {
-        if (xhr.status==200) {
-            if (callback){
-                callback(JSON.parse(this.response));
-            }
-			console.log('Request done!');
-
-        } else {
-            console.log('ReadyState: ' + this.readyState + "\n" + 'Status :' + this.status);
-        }
-    }
-
-	xhr.send(formData);
-}
-
-
-getVideo();
-if (!video.addEventListener('canplay', videoStream)) {
-
-	canvas.setAttribute("style", "display: none;");
-
-}
-if (typeof(uploader) !== 'undefined') {
-
-	uploader.addEventListener('change', photoStream);
-
 }
 
 function delete_picture(path) {
-	console.log(path)
 
-	// TODO : Fonction doublon gallery et photobooth
-	// if (confirm('You’re about to erase that image, are you sure')){
+	postPHP('photobooth/delete_post', {'picture': path});
+	var post = document.getElementById(path);
+	post.classList.toggle('hidden');
 
-		postPHP('gallery/delete_post', {picture: path});
-		var post = document.getElementById(path);
-		post.classList.toggle('hidden');
-
-	// }
 }
+
+//---- MAIN -----//
+
+//	1 - Ask for webcam
+getVideo();
+//	2 - Accept (1) || Refuse (2) webcam
+video.oncanplay = videoStream;	// (1)
+uploader.oninput = photoStream;	// (2)
+//	3 - Snapshot
+snap['snapBtn'].onclick = takePhoto;
+

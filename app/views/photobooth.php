@@ -1,20 +1,20 @@
 <div id="photobooth">
 	<div id="main" >
 		<div id="montageView">
-			<video id="video" autoplay></video>
+			<video id="video" autoplay oncanplay="videoStream()"></video>
 			<!--  Here we put the user montage preview-->
 			<canvas id="imgPreview"></canvas>
 
 			<!--  Upload photo method  -->
 			<div id="uploadPhoto">
 				<form id='upload' action='photobooth/share' formmethod='post' enctype='multipart/form-data'>
-					<input type='file' id='uploader' accept="image/png, image/jpeg" />
+					<input type='file' id='uploader' accept="image/png, image/jpeg" onload="photoStream()"/>
 				</form>
 			</div>
 
 			<div id="snapPhoto">
 				<!-- FIXME: Disabled/Enabled persistence on reload. -->
-				<button id='snapBtn' class='snap'  onclick="takePhoto()" disabled="" >◻︎</button>
+				<button id='snapBtn' class='snap' disabled="">◻︎</button>
 				<audio id="snapNoise" class='snap' src="https://freesound.org/data/previews/202/202296_1038806-lq.mp3" hidden></audio>
 			</div>
 
@@ -31,7 +31,7 @@
 	<div id="side" class="photoBox">
 		<?php foreach($photos as $post) : ?>
 			<div id="<?= $post->path ?>" class="save_photo">
-				<span id="deleteCross" alt="delete picture" class='clickable' onclick="delete_picture('<?= $post->path ?>')">×</span>
+				<span alt="delete picture" class='clickable deleteCross' onclick="delete_picture('<?= $post->path ?>')">×</span>
 				<a href="<?= $post->path ?>" download="handsome">
 				<img class="side_img" src="<?= $post->path ?>">
 			</a>

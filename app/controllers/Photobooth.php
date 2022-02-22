@@ -34,29 +34,77 @@ class Photobooth extends Controller {
 	}
 
 	public function blendFilter($selfie, $filter) {
-
-		list($dst_width, $dst_height) =  getimagesize($selfie);
-		list($src_width, $src_height) =  getimagesize($filter);
 		$dst_img = imagecreatefrompng($selfie);
     	$src_img = imagecreatefrompng($filter);
 
 		//create the saving pictures directory
 		$dir = 'tools/img/' . $this->auth->get_auth()->login;
 		create_dir($dir);
+		list($width, $height) = $this->put_filter_on_usrImg($selfie, $filter, $src_img, $dst_img);
+		$montage = $this->fill_black_font($dst_img, $width, $height);
 
-		// Copy and resize part of an image with resampling
-		imagecopyresampled(
-			$dst_img, $src_img,
-			0, 0, 0, 0, # dst_x, dst_y, src_x, src_y
-			$dst_width, $dst_height,
-			$src_width, $src_height
-		);
-
-		// Output a PNG to a files
+		// PNG to files
 		$url = $dir .  '/'. time() . '.png';
-		imagepng($dst_img, $url, 0);
+		imagepng($montage, $url, 0);
 
 		return $url;
+	}
+
+	public function put_filter_on_usrImg($img_url, $fltr_url, $src_img, &$dst_img) {
+		list($dst_width, $dst_height) = getimagesize($img_url);
+		list($width, $height) = getimagesize($img_url);
+		list($width_orig, $height_orig) = getimagesize($fltr_url);
+
+		$ratio_orig = $width_orig/$height_orig;
+		if ($width/$height > $ratio_orig) {
+			$width = $height * $ratio_orig;
+		} else {
+			$height = $width / $ratio_orig;
+		}
+		imagecopyresampled($dst_img, $src_img,
+			$dst_width/2 - $width/2, $dst_height - $height,	// dst : x, y = bottom centered
+			0, 0,											// src : x, y
+			$width, $height,								// dst : width, height
+			$width_orig, $height_orig						// src : width, height
+		);
+		return [$dst_width, $dst_height];
+	}
+
+	public function fill_black_font($src, $src_width, $src_height) {
+		$width = 640;
+		$height = 480;
+		$width_orig = $src_width;
+		$height_orig = $src_height;
+		$dst = imagecreatetruecolor($width, $height);
+
+		$ratio_orig = $src_width/$src_height;
+		if ($width/$height > $ratio_orig) {
+			$src_width = $height * $ratio_orig;
+		} else {
+			$src_height = $width / $ratio_orig;
+		}
+		imagecopyresampled(
+			$dst, $src,											// dest = black font, src = montage
+			$width/2 - $src_width/2, $height/2 - $src_height/2,	// dst : x, y = bottom centered
+			0, 0,												// src : x, y
+			$src_width, $src_height,							// dst : width, height
+			$width_orig, $height_orig							// src : width, height
+		);
+
+		return $dst;
+	}
+
+	public function delete_post()
+	{
+		if (isset($_POST)) {
+			$post = $_POST['picture'];
+			$user = $this->auth->get_auth()->id;
+
+			$this->pictures->delete_picture($post, $user);
+			unlink($post);
+
+		}
+
 	}
 
 }

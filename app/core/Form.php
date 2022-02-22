@@ -13,11 +13,10 @@
     # HTML generator
         public function input($name, $displayed = null, $type = "text", $placeholder = null) {
             $dom = new DOMDocument('1.0');
-            
+
             $label = $this->create_label($dom, $displayed, $name);
             $input = $this->create_input($dom, $type, $name, $placeholder);
 
-            
             $label->appendChild($input);
             $dom->appendChild($label);
 
@@ -34,7 +33,7 @@
             // <label for="sendmail"> blabla
             //      <label class='switch'>
             //          <input name="sendmail" type="checkbox" CHECKED>
-            //          <span class='slider round'> 
+            //          <span class='slider round'>
             //      </label>
 
             $g_label = $this->create_label($dom, $displayed, $name);
@@ -47,7 +46,6 @@
                 $checked = $dom->createAttribute('checked');
                 $input->appendChild($checked);
             }
-            
             $span = $dom->createElement('span');
             $class = $dom->createAttribute('class');
             $class->value = 'slider round';
@@ -113,7 +111,7 @@
                 $submit = "<a href='account/reset_form_send_mail'>Password forgotten</a> <br/>";
             $submit .= " <button type='submit'> $name </button>";
             return $submit;
-        }    
+        }
 
 
 

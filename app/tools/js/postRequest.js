@@ -11,15 +11,16 @@ function serialize_params(obj) {
 
 function postPHP(url, obj, callback = null) {
     xhr = new XMLHttpRequest();
+    formData = new FormData();
+
+	for (var key in obj) {
+        formData.append(key, obj[key])
+	}
     xhr.open('POST', url, true);
-    params = serialize_params(obj);
-    console.log(params)
-
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
     xhr.onload = function() {
         if (xhr.status==200) {
             if (callback){
+                // console.log(this.response);
                 callback(JSON.parse(this.response));
             }
             console.log('Request done!');
@@ -27,5 +28,5 @@ function postPHP(url, obj, callback = null) {
             console.log('ReadyState: ' + this.readyState + "\n" + 'Status :' + this.status);
         }
     }
-    xhr.send(params);
+    xhr.send(formData);
 }
