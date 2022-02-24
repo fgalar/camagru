@@ -7,7 +7,7 @@
 		margin: 0;
 
 		font-family: 'Helvetica Neue', Helvetica, monospace;
-		font-size: 1.2rem;      /*  police size set by nav/user(++malvoyant)*/
+		font-size: 1rem;      /*  police size set by nav/user(++malvoyant)*/
 		font-weight: 200;     /*  largeur de la police  */
 		line-height: 1.6;     /*  espacement des lignes conseillées par w3school    */
 		letter-spacing: .1em; /*  augmentation de l'ecart entre les lettres de 10%  */
