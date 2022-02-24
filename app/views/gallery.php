@@ -25,9 +25,8 @@
 <?php endforeach; ?>
 
 <?php if (count($posts->pictures) == 0) :?>
-<h3 class="empty">No picture ... </h3>
+	<p class="empty">No picture ...</p>
 <?php endif; ?>
-<!-- end Paging -->
 </div>
 <!-- Modal -->
 <div id="myModal" class="modal">
