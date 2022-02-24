@@ -5,8 +5,8 @@ var listComments= document.getElementById('commentaries');
 var modalImg = document.getElementById('img01');
 var close = document.getElementsByClassName("close")[0];
 var imgID		= 0;
-
 var gallery = document.querySelector('#gallery')
+
 
 // Open modal on photo click
 	function focusImg(photo) {
@@ -19,25 +19,24 @@ var gallery = document.querySelector('#gallery')
 
 	}
 
-	tableImg.forEach(img => {
+	function addEventListenerList() {
+		const tableImg = document.querySelectorAll(".photo");
+		const com_icons_t = document.querySelectorAll('.icon-pack.comment');
 
-		img.addEventListener('click', function() {
+		tableImg.forEach(img => {
+			img.addEventListener('click', function() {
 
-			img.onclick = focusImg(img);
+				img.onclick = focusImg(img);
 
+			});
 		});
-
-	});
-
-	com_icons_t.forEach(com_icon => {
-
-		com_icon.addEventListener('click', function() {
-
-			com_icon.onclick = focusImg(com_icon.parentNode.parentNode.parentNode.getElementsByTagName('img')[0]);
-
-		});
-
-	})
+		com_icons_t.forEach(com_icon => {
+			com_icon.addEventListener('click', function() {
+				to_search = com_icon.parentNode.parentNode.querySelector('img');
+				com_icon.onclick = focusImg(to_search);
+			});
+		})
+	}
 
 
 	close.addEventListener('click', function() {
@@ -130,20 +129,16 @@ function add_pictures(nb) {
 
 	postPHP('gallery/get_posts_before_id', { 'last_id': last_id, 'nb': nb },
 			(new_element) => {
-				if (typeof(new_element) !== 'undefined')
-				{
+				if (typeof(new_element) !== 'undefined') {
 					nb = new_element.pictures.length;
 
 					for (let i = 0; i < nb; i++) {
 						var figure = document.querySelector('figure').cloneNode([true]);
 						figure.setAttribute('id', new_element.pictures[i].path);
 
-						img = figure.querySelector('img');
-						img.setAttribute('id', new_element.pictures[i].id);
-						img.src = new_element.pictures[i].path;
-						img.addEventListener('click', function() {
-							img.onclick = focusImg(img);
-						});
+						picture = figure.querySelector('img');
+						picture.setAttribute('id', new_element.pictures[i].id);
+						picture.src = new_element.pictures[i].path;
 
 						figcaption = figure.querySelector('figcaption');
 						figcaption.setAttribute('id', "caption"+ new_element.pictures[i].id);
@@ -174,8 +169,14 @@ function add_pictures(nb) {
 
 						gallery.appendChild(figure);
 					}
+
 				}
-	})
+	
+				
+				
+			});
+
+	addEventListenerList();
 
 }
 
@@ -183,3 +184,7 @@ function get_page_last_picture() {
 	var images = document.querySelectorAll('.photo');
 	return images[images.length - 1].id;
 }
+
+
+// 1 - Add all event listener onclick images
+addEventListenerList();
