@@ -113,13 +113,16 @@ var gallery = document.querySelector('#gallery')
 // infinite scroll
 window.addEventListener('scroll', () => {
 	// scrollTop : ce qu'on a scrollé depuis le top
-	// scrollHeight : La hauteur total qui peut etre scroller par le client.
+	// scrollHeight : La hauteur total qui peut etre scrollé par le client.
 	// clientHieght : Hauteur visible du screen du client
-	const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+	if (document.querySelector('figcaption')) {
+		const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
-	if (clientHeight + scrollTop === scrollHeight) {
-		add_pictures(3);
+		if (clientHeight + scrollTop === scrollHeight) {
+			add_pictures(3);
+		}
 	}
+
 })
 
 function add_pictures(nb) {
@@ -130,7 +133,7 @@ function add_pictures(nb) {
 				if (typeof(new_element) !== 'undefined')
 				{
 					nb = new_element.pictures.length;
-					// console.log(new_element.pictures.length)
+
 					for (let i = 0; i < nb; i++) {
 						var figure = document.querySelector('figure').cloneNode([true]);
 						figure.setAttribute('id', new_element.pictures[i].path);

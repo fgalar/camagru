@@ -96,13 +96,12 @@ class Settings extends Controller {
 
     public function update_sendmail(&$input)
     {
-        // Authorization to Sending mail ?       
+        // Authorization for Sending mail ?
         if (isset($input['sendmail']) && $this->userRunning()->sendmail == 0)       // no -> yes
             $input['sendmail'] = '1';
         elseif (!isset($input['sendmail']) && $this->userRunning()->sendmail == 1)  // yes -> no
             $input['sendmail'] = '0';
         else                                                                        // no change.
             unset($input['sendmail']);
-        
     }
 }

@@ -9,8 +9,9 @@ var method = undefined;
 var userImg = undefined;
 var uploader = document.getElementById('uploader');
 var img = undefined;
-//	0 - Disabled snapshot button onreload (for firefox persistance cache attribute)
+//	0 - Disabled snapshot button and unset upload.value onreload (for firefox persistance cache attribute)
 snap["snapBtn"].setAttribute('disabled', "");
+uploader.value = "";
 
 function getVideo() {
 	// Get access to camera!
@@ -40,14 +41,19 @@ function onPreview(stream) {
 
 }
 
+function unsetFilter() {
+	if (prev_filter = document.querySelector('.selected-item'))
+		prev_filter.classList.toggle('selected-item');
+	filter = undefined;
+}
+
 function selectFilter(filterName) {
 
 	if (userImg || method == 'video')
 		snap["snapBtn"].removeAttribute('disabled');
 
 	// remove selected filter color
-	if (prev_filter = document.querySelector('.selected-item'))
-		prev_filter.classList.toggle('selected-item');
+	unsetFilter();
 	// set colored selected filter
 	filter = document.getElementById(filterName);
 	filter.classList.toggle('selected-item');
@@ -76,7 +82,7 @@ function videoStream() {
 }
 
 function photoStream() {
-	console.log("photoStream");
+
 	onPreview('photo');
 	if (this.files && this.files[0].size > 2097152) {
 
@@ -169,7 +175,7 @@ function reloadImg() {
 
 // Take a snapshot
 function takePhoto(){
-	console.log("takePhoto");
+
 	snap['snapNoise'].play();
 
 	const flt_url = filter.src
@@ -180,7 +186,7 @@ function takePhoto(){
 	postPHP('photobooth/share', {'filter': flt_url,'selfie' :img_url},
 			   function(new_photo) {
 		// Add div > span + img;
-		console.log(new_photo)
+
 		canvas = document.getElementById('imgPreview');
 		photo_element = document.createElement('div');
 		span = document.createElement('span');
