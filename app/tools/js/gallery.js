@@ -6,6 +6,8 @@ var modalImg = document.getElementById('img01');
 var close = document.getElementsByClassName("close")[0];
 var imgID		= 0;
 var gallery = document.querySelector('#gallery')
+var post_btn = document.getElementById("btn_post");
+
 
 
 // Open modal on photo click
@@ -15,6 +17,7 @@ var gallery = document.querySelector('#gallery')
 		modalImg.src = photo.src;
 		modalImg.value = photo.id;
 		imgID = photo.id;
+
 		get_comments(photo.id);
 
 	}
@@ -50,6 +53,27 @@ var gallery = document.querySelector('#gallery')
 
 	});
 
+	// Disabled or enabled button post comment depending on text area content (empty or not)
+	var textarea = document.querySelector("#commentArea");
+	if (textarea) {
+		if (post_btn) {
+			post_btn.disabled = true;
+		}
+		textarea.addEventListener('input', disabledEmpty);
+		function disabledEmpty() {
+			var text = this.value;
+
+			if (text !== ''){
+
+				document.getElementById("btn_post").disabled = false;
+			}
+			else {
+
+				document.getElementById("btn_post").disabled = true;
+			}
+			text.onchange = disabledEmpty;
+		}
+	}
 
 // actions
 	function switch_like(id) {
@@ -106,6 +130,7 @@ var gallery = document.querySelector('#gallery')
 			com.innerHTML = parseInt(com.innerHTML) + 1;
 
 		})
+		document.getElementById("btn_post").disabled = true;
 
 	}
 
@@ -117,7 +142,7 @@ window.addEventListener('scroll', () => {
 	if (document.querySelector('figcaption')) {
 		const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
-		if (clientHeight + scrollTop === scrollHeight) {
+		if (clientHeight + scrollTop >= scrollHeight) {
 			add_pictures(3);
 		}
 	}
@@ -171,9 +196,7 @@ function add_pictures(nb) {
 					}
 
 				}
-	
-				
-				
+
 			});
 
 	addEventListenerList();

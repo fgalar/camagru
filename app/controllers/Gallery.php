@@ -114,7 +114,7 @@
         {
             $user = $this->auth->get_auth();
 
-            $comment = $_POST['comment'];
+            $comment = htmlspecialchars($_POST['comment'], ENT_QUOTES);
             $picture = $_POST['picture_id'];
 
             $new_comment = $this->comments->add_comment($user->id, $picture, $comment);
